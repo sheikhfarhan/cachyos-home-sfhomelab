@@ -26,6 +26,8 @@ state/
 auth/
 docker-data/
 arcane-data/
+socket/
+dozzle-data/
 
 # --- Specific Pattern Directories ---
 *-config/

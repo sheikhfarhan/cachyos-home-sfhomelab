@@ -7,25 +7,38 @@
 
 > **"A modular, automated homelab, running a media server on Arch Linux (CachyOS)"**
 
-> **📚 FULL DOCUMENTATION:** Detailed deployment guides, network architecture, and security policies are hosted on the live wiki at **[docs.sfhomelab.com](https://docs.sfhomelab.com)**.
+> **📚 FULL DOCUMENTATION:** Detailed deployment guides, network architecture and security policies are hosted on the live wiki at **[docs.sfhomelab.com](https://docs.sfhomelab.com)**.
 
-This repository strictly houses the Docker Compose stacks, environment templates, and automation scripts for the homelab infrastructure, where it will be relatively easy for me to clone/pull when deploying similar stacks to a new machine.
+This repository houses the Docker Compose stacks, environment templates and some config files, where it will be relatively easy for me to clone/pull when deploying similar stacks to a new machine.
 
-This is put together in Feb 2026, for the future me when I am ready to move what I have to a `always-on` homelab/server that I am putting together. And if it somehow helps others on their own journey, its awesome too!
+This is put together in Feb 2026, for the future me when I am ready to move what I have to an `always-on` homelab/server that I am putting together. And if it somehow helps others on their own journey, its awesome too!
 
 ---
 
-## 🖥️ Current Hardware Specifications
+## Architecture Setup
 
-| Component | Detail |
-| --- | --- |
-| **OS** | Daily Driver - CachyOS |
-| **MOBO** | X870 Asrock Pro Rs |
-| **CPU** | AMD Ryzen 5 7600X |
-| **RAM** | 32GB DDR5 |
-| **GPU** | Radeon RX 5600 XT (Transcoding) |
-| **Storage** | 2x 1TB NVMe + 2 x 2TB HDDs MergerFS Vault + 500GB Crucial SSD as "Scratch" Disk |
-| **Network Card** | Marvell AQC113C 10GbE |
+### Node 1: Home Server (Internal App & Vault)
+
+Located in my home. Handles heavy compute, media storage, media server transcoding and the automated P2P download stack.
+
+| Component | Detail | 
+| :--- | :--- | 
+| **OS** | CachyOS (Arch Linux) | 
+| **CPU / RAM** | AMD Ryzen 5 7600X / 32GB DDR5 | 
+| **GPU** | Radeon RX 5600 XT | 
+| **Storage** | 2x 1TB NVMe + 2 x 2TB HDDs MergerFS Vault + 500GB Crucial SSD as "Scratch" Disk | 
+| **Network** | Marvell 10GbE + Firewalld VLAN Isolation + Tailscale | 
+
+### Node 2: VPS (The Edge Gateway)
+
+OVH SG Datacentre. Handles public ingress, identity, notifications and container management/orchestration.
+
+| Component | Detail | 
+| :--- | :--- | 
+| **OS** | Ubuntu 24.04 (VPS) | 
+| **CPU / RAM** | 4 vCPU / 8GB RAM | 
+| **Network** | High-Bandwidth Public Edge + Tailscale | 
+| **Core Services** | Caddy (Proxy), VoidAuth (SSO), Komodo (Orchestration), MkDocs, Gotify |
 
 ## Architecture Highlights for Media Server
 
@@ -72,9 +85,7 @@ We bypass the default Docker bridge to enforce isolation.
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/qbittorrent.png" alt="qBittorrent" width='30'/> | **[qBittorrent](https://www.qbittorrent.org/)** | **Downloader.** BitTorrent client routed through VPN. |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/transmission.png" alt="transmission" width='30'/> | **[Transmission](https://transmissionbt.com/)** | **Downloader.** BitTorrent client routed through VPN. |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/beszel.png" alt="Beszel" width='20'/> | **[Beszel](https://github.com/henrygd/beszel)** | **Monitoring.** Lightweight agent tracking LVM, CPU, and Docker metrics. |
-| <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/dozzle.png" alt="Dozzle" width='30'/> | **[Dozzle](https://github.com/amir20/dozzle)** | **Monitoring.** WebUI to monitor Docker logs. |
-| <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/whats-up-docker.png" alt="WUD" width='30'/> | **[WUD](https://github.com/getwud/wud)** | **Monitoring.** Watches and alerts for images updates. |
-| <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/speedtest-tracker.png" alt="Speedtest" width='30'/> | **[Speedtest](https://github.com/alexjustesen/speedtest-tracker)** | **Monitoring.** Automated internet bandwidth and latency tracking. |
+| <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/dozzle.png" alt="Dozzle" width='30'/> | **[Dozzle](https://github.com/amir20/dozzle)** | **Monitoring.** WebUI to monitor Docker logs. |> | **[Speedtest](https://github.com/alexjustesen/speedtest-tracker)** | **Monitoring.** Automated internet bandwidth and latency tracking. |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/homepage.png" alt="Homepage" width='30'/> | **[Homepage](https://gethomepage.dev/)** | **Dashboard.** Central start page with live service widgets. |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/kopia.png" alt="Kopia" width='30'/> | **[Kopia](https://kopia.io/)** | **Backup.** Dedup backups to Cloudflare R2. |
 | <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/goaccess.png" alt="GoAccess" width='30'/> | **[GoAccess](https://goaccess.io/)** | **Analytics.** Real-time visual web log analyzer for Caddy. |

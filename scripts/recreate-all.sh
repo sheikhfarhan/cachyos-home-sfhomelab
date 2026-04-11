@@ -17,7 +17,7 @@ MON="$BASE_DIR/mon-stack"
 # --- Step 1: Crowdsec First ---
 
 echo "[1/5] Re-creating CrowdSec (Security Brain)..."
-cd "$GATEWAY/crowdsec" && docker compose up -d --force-recreate
+cd "$OPS/crowdsec" && docker compose up -d --force-recreate
 
 # --- Step 2: Monitoring & Management ---
 # We do this early so the Socket Proxy is ready if other apps need it

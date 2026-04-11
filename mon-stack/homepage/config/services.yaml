@@ -164,28 +164,17 @@
         #  type: dozzle
         #  url: http://172.20.0.26:8080
 
-    - WUD:
-        icon: /icons/wud.png
-        href: http://localhost:3001
-        description: Update Notifier
-        container: wud
-        widget:
-          type: whatsupdocker
-          url: http://172.20.0.27:3000
-          username: {{HOMEPAGE_VAR_WUD_USER}}
-          password: {{HOMEPAGE_VAR_WUD_PASS}}
-
-    - Beszel:
+    - Beszel Hub:
         icon: beszel.png
-        href: http://172.20.0.31:8090
+        href: http://100.110.20.2:8090/
         description: System Monitoring
         container: beszel-hub
         widget:
           type: beszel
-          url: http://beszel-hub:8090
+          url: http://100.110.20.2:8090/
           username: {{HOMEPAGE_VAR_BESZEL_USER}}
           password: {{HOMEPAGE_VAR_BESZEL_PASS}}
-          systemId: uwyihtywidc0b1x
+          systemId: {{HOMEPAGE_VAR_BESZEL_SYSTEMID}}
           version: 2 # optional, default is 1
 
     - Kopia:

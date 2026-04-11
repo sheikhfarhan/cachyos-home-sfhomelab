@@ -78,8 +78,6 @@ services:
     depends_on:
       socket-proxy:
         condition: service_started
-      beszel-hub:
-        condition: service_healthy
 
   ##################################################
   # 3. DOZZLE (Log Viewer)
@@ -92,6 +90,8 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.26
         ipv6_address: fd00:dead:beef:2::26
+    volumes:
+      - ./dozzle/dozzle-data:/data
     ports:
       - 9090:8080
     environment:
@@ -102,34 +102,7 @@ services:
       - socket-proxy
 
   ##################################################
-  # 4. BESZEL HUB (Monitoring Server)
-  ##################################################
-  beszel-hub:
-    image: henrygd/beszel:latest
-    container_name: beszel-hub
-    hostname: beszel-hub
-    networks:
-      dockerapps-net:
-        ipv4_address: 172.20.0.31
-        ipv6_address: fd00:dead:beef:2::31
-    ports:
-      - 8090:8090
-    environment:
-      - TZ=${TZ}   
-    volumes:
-      - ./beszel/data:/beszel_data
-      - ./beszel/socket:/beszel_socket
-    healthcheck:
-      # Use the built-in health command provided by the Beszel binary
-      test: ["CMD", "/beszel", "health", "--url", "http://localhost:8090"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 20s
-    restart: unless-stopped
-
-  ##################################################
-  # 5. BESZEL AGENT (Metrics Collector)
+  # 4. BESZEL AGENT (Metrics Collector for CachyOS)
   ##################################################
   beszel-agent:
     image: henrygd/beszel-agent:latest
@@ -139,35 +112,29 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.32
         ipv6_address: fd00:dead:beef:2::32
+    ports:
+      # CRITICAL: Expose this port so the VPS Hub can scrape it via Tailscale!
+      - "45876:45876"
     environment:
       - TZ=${TZ}   
-      - LISTEN=45876
-      - KEY=${MEDIASVR_PUBLIC_KEY}
-      - TOKEN=${MEDIASVR_TOKEN}
-      - HUB_URL=http://172.20.0.31:8090
-      # Use socket-proxy
+      - PORT=45876
+      # This MUST match the key generated in the VPS Hub UI
+      - KEY=${BESZEL_PUBLIC_KEY}
+      - TOKEN=${BESZEL_CACHYOS_TOKEN}
       - DOCKER_HOST=tcp://socket-proxy:2375
-      # Make the MAIN Dashboard Gauge track CachyOS OS
       - FILESYSTEM=/dev/nvme0n1p2
     volumes:
-      - ./beszel/socket:/beszel_socket
-      # 1. MAIN OS DRIVE (Full I/O and Space)
+      - ./beszel/beszel_agent_data:/var/lib/beszel-agent
       - /:/extra-filesystems/nvme0n1__CachyOS:ro
-      # 2. SCRATCH DRIVE (Full I/O and Space)
       - /mnt/crucial500/.beszel:/extra-filesystems/sdc__Scratch_SSD:ro
-      # 3. MERGERFS VAULT (Space only - no physical prefix used)
       - /mnt/vault/.beszel:/extra-filesystems/HDD_Vault:ro
-      # Optional - listing systemd services
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
-    tmpfs:
-      - /var/lib/beszel-agent
     restart: unless-stopped
     depends_on:
       - socket-proxy
-      - beszel-hub
 
   ##################################################
-  # 6. ARCANE
+  # 5. ARCANE
   ##################################################
   arcane:
     image: ghcr.io/getarcaneapp/arcane:latest
