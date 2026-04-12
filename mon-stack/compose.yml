@@ -15,6 +15,9 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.28
         ipv6_address: fd00:dead:beef:2::28
+    # ADD THIS FOR TAILSCALE PORT BINDING (for Remote Access to Docker API)
+    ports:
+      - "100.110.20.1:2375:2375"
     environment:
       # READ ACCESS (Allowed)
       - CONTAINERS=1
