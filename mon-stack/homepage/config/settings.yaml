@@ -14,7 +14,10 @@ layout:
   Automation:
     style: row
     columns: 4
-  Management:
+  Management (CachyOS Home Node):
+    style: row
+    columns: 4
+  OVH-VPS Remote Services:
     style: row
     columns: 4
 

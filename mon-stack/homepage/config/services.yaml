@@ -114,7 +114,7 @@
           username: {{HOMEPAGE_VAR_QBIT_USER}}
           password: {{HOMEPAGE_VAR_QBIT_PASS}}
 
-- Management:
+- Management (CachyOS Home Node):
     - Arcane:
         icon: arcane.png
         href: http://localhost:3552
@@ -127,22 +127,6 @@
           key: {{HOMEPAGE_VAR_ARCANE_API_KEY}}
           fields: ["running", "stopped", "total", "image_updates"]
     
-    - Gotify:
-        icon: gotify.png
-        href: https://gotify.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
-        description: Notifications
-        container: gotify
-        widget:
-          type: gotify
-          url: https://gotify.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
-          key: {{HOMEPAGE_VAR_GOTIFY_KEY}}
-
-    #- Caddy:
-    #    icon: caddy.png
-    #    #href: http://172.20.0.23
-    #    description: Reverse Proxy
-    #    container: caddy
-        
     - CrowdSec:
         icon: crowdsec.png
         #href: http://172.20.0.24:8080
@@ -163,19 +147,6 @@
         #widget:
         #  type: dozzle
         #  url: http://172.20.0.26:8080
-
-    - Beszel Hub:
-        icon: beszel.png
-        href: http://100.110.20.2:8090/
-        description: System Monitoring
-        container: beszel-hub
-        widget:
-          type: beszel
-          url: http://100.110.20.2:8090/
-          username: {{HOMEPAGE_VAR_BESZEL_USER}}
-          password: {{HOMEPAGE_VAR_BESZEL_PASS}}
-          systemId: {{HOMEPAGE_VAR_BESZEL_SYSTEMID}}
-          version: 2 # optional, default is 1
 
     - Kopia:
         icon: kopia.png
@@ -224,6 +195,74 @@
     #      key: {{HOMEPAGE_VAR_AUTHENTIK_API_TOKEN}}
     #      version: 2
 
+- OVH-VPS Remote Services:
+    - Caddy Reverse Proxy:
+        icon: caddy.png
+        href: https://status.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
+        description: Edge Router & Web Server
+        server: ovh-vps-remote
+        container: caddy
+        widget:
+          type: caddy
+          url: http://100.110.20.2:2019/
+          fields: ["upstreams", "requests", "requests_failed"]
+        
+    - Uptime Kuma:
+        icon: uptime-kuma.png
+        href: https://kuma.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
+        description: Status & Alerting
+        server: ovh-vps-remote
+        container: uptime-kuma
+
+    - Komodo:
+        icon: komodo.png
+        href: https://komodo.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
+        description: Stacks Management
+        server: ovh-vps-remote
+        container: komodo-core
+        widget:
+          type: komodo
+          url: http://100.110.20.2:9120/
+          key: {{HOMEPAGE_VAR_KOMODO_KEY}}
+          secret: {{HOMEPAGE_VAR_KOMODO_SECRET}}
+          showSummary: true # optional, default: false. Takes precedence over showStacks
+          showStacks: true # optional, default: false
+    
     - VoidAuth:
         icon: /icons/voidauth.png
         href: https://auth2.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
+        server: ovh-vps-remote
+        container: voidauth
+        description: Authentication
+
+    - Beszel Hub:
+        icon: beszel.png
+        href: http://100.110.20.2:8090/
+        description: System Monitoring
+        server: ovh-vps-remote
+        container: beszel-hub
+        widget:
+          type: beszel
+          url: http://100.110.20.2:8090/
+          username: {{HOMEPAGE_VAR_BESZEL_USER}}
+          password: {{HOMEPAGE_VAR_BESZEL_PASS}}
+          systemId: {{HOMEPAGE_VAR_BESZEL_SYSTEMID}}
+          version: 2 # optional, default is 1
+
+    - Gotify:
+        icon: gotify.png
+        href: https://gotify.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
+        description: Notifications
+        server: ovh-vps-remote
+        container: gotify
+        widget:
+          type: gotify
+          url: https://gotify.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
+          key: {{HOMEPAGE_VAR_GOTIFY_KEY}}
+
+    - GoAccess:
+        icon: goaccess.png
+        href: https://goaccess.{{HOMEPAGE_VAR_ROOT_DOMAIN}}  
+        description: Web Loggins
+        server: ovh-vps-remote
+        container: goaccess
