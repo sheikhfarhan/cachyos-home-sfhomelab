@@ -18,6 +18,9 @@ services:
     # ADD THIS FOR TAILSCALE PORT BINDING (for Remote Access to Docker API)
     ports:
       - "100.110.20.1:2375:2375"
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     environment:
       # READ ACCESS (Allowed)
       - CONTAINERS=1
@@ -56,6 +59,9 @@ services:
         ipv6_address: fd00:dead:beef:2::25
     ports:
       - 3000:3000
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     env_file:
       - .env
     environment:
@@ -97,6 +103,9 @@ services:
       - ./dozzle/dozzle-data:/data
     ports:
       - 9090:8080
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     environment:
       # Use the Proxy
       - DOCKER_HOST=tcp://socket-proxy:2375
@@ -118,6 +127,9 @@ services:
     ports:
       # CRITICAL: Expose this port so the VPS Hub can scrape it via Tailscale!
       - "45876:45876"
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     environment:
       - TZ=${TZ}   
       - PORT=45876
@@ -149,6 +161,9 @@ services:
         ipv6_address: fd00:dead:beef:2::17
     ports:
       - 3552:3552
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     volumes:
       - ./arcane/arcane-data:/app/data
     environment:

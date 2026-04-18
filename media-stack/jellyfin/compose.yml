@@ -21,6 +21,9 @@ services:
         ipv6_address: fd00:dead:beef:2::10
     ports:
       - 8096:8096
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -49,6 +52,9 @@ services:
         ipv6_address: fd00:dead:beef:2::12
     ports:
       - 5055:5055
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

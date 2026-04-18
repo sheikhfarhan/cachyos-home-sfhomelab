@@ -23,6 +23,9 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.11 
         ipv6_address: fd00:dead:beef:2::11
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.sfhomelab.com:100.110.20.2"
     ports:
       - 8001:8000 # Gluetun Control Server
       # --- QBITTORRENT PORTS ---
@@ -219,6 +222,9 @@ services:
       - /mnt/crucial500/downloads:/downloads
     ports:
       - 7878:7878
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     restart: unless-stopped
     depends_on:
       qbittorrent:
@@ -246,6 +252,9 @@ services:
       - /mnt/crucial500/downloads:/downloads
     ports:
       - 8989:8989
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     restart: unless-stopped
     depends_on:
       qbittorrent:
