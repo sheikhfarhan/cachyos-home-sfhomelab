@@ -1,8 +1,9 @@
-#filenames:
-#  - /var/log/caddy/access.log
-#labels:
-#  type: caddy
-#---
+filenames:
+  - /var/log/caddy/access.log
+labels:
+  type: caddy
+
+---
 # Jellyfin Logs
 filenames:
   - /var/log/jellyfin/log_*.log

@@ -12,8 +12,10 @@ services:
         ipv4_address: 172.20.0.33
         ipv6_address: fd00:dead:beef:2::33
     ports:
-    # Expose locally for setup, then close if we reverse proxy with Caddy
-      - 51515:51515
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:51515:51515"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:51515:51515"
     # Enable FUSE for mounting snapshots (Optional but recommended)
     cap_add:
       - SYS_ADMIN

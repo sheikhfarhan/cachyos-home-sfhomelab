@@ -1,0 +1,94 @@
+# --- Global Options ---
+{
+    dynamic_dns {
+        provider cloudflare {env.CLOUDFLARE_API_TOKEN}
+        domains {
+            {$ROOT_DOMAIN} jellyfin
+        }
+    }
+
+    # Caddy x Crowdsec
+    crowdsec {
+        api_url http://172.20.0.24:8080
+        api_key {env.CROWDSEC_API_KEY}
+        ticker_interval 30s
+    }
+
+    log default {
+        output stdout
+        format console
+        exclude http.log.access
+    }
+
+    log system_file {
+        output file /var/log/caddy/caddy.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+        format console
+        exclude http.log.access
+    }
+
+}
+
+# ==============================================================================
+# SNIPPETS (Reusable Logic)
+# ==============================================================================
+
+(logging) {
+    # 1. Ignore internal LAN and Tailscale routing
+    @internal {
+        remote_ip 100.110.20.0/24 172.20.0.0/24 192.168.0.0/16 127.0.0.1 fd00:dead:beef:2::/64 ::1
+    }
+
+    # 2. Ignore Uptime Kuma pings (matches the specific User-Agent)
+    @kuma_pings {
+        header User-Agent *Uptime-Kuma*
+    }
+    log_skip @internal
+    log_skip @kuma_pings
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 10mb
+            roll_keep 5
+        }
+        format json 
+    }
+}
+
+(security) {
+    @geoblock {
+        # 1. Ignore the Geo-block if the IP comes from Tailscale, Docker, or LAN
+        not remote_ip 100.110.20.0/24 172.20.0.0/24 192.168.0.0/16 127.0.0.1 ::1
+        
+        # 2. Block everyone else unless they are in SG
+        not maxmind_geolocation {
+            db_path "/etc/caddy/maxmind/GeoLite2-Country.mmdb"
+            allow_countries SG
+        }
+    }
+    respond @geoblock "Access Denied: Geo-Block Active" 403
+
+    route {
+        crowdsec
+    }
+}
+
+# ==============================================================================
+# SITES
+# ==============================================================================
+
+# PRE-PRODUCTION DOMAIN
+jellyfin.{$ROOT_DOMAIN} {
+    tls {
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+        resolvers 1.1.1.1 8.8.8.8
+    }
+    
+    import logging
+    import security
+
+    reverse_proxy http://172.20.0.10:8096 {
+        header_up X-Real-IP {remote_host}
+    }
+}

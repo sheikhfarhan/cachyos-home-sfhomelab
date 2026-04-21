@@ -20,7 +20,15 @@ services:
         ipv4_address: 172.20.0.10
         ipv6_address: fd00:dead:beef:2::10
     ports:
-      - 8096:8096
+      # 1. Opens the door for the OVH-VPS proxy (Tailscale)
+      - "100.110.20.1:8096:8096"
+      
+      # 2. Opens the door for our Home TV (Local LAN)
+      - "192.168.0.100:8096:8096"
+      
+      # 3. Keeps localhost open for the Local Caddy proxy
+      - "127.0.0.1:8096:8096"
+
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
@@ -32,10 +40,14 @@ services:
       - ./jellyfin-config:/config
       - ./jellyfin-cache:/cache
       - /mnt/vault/media:/media
-    tmpfs:
-      - /config/data/transcodes
+    #tmpfs:
+    #  - /config/data/transcodes
+    #devices:
+    #  - /dev/dri/renderD128:/dev/dri/renderD128
     devices:
-      - /dev/dri/renderD128:/dev/dri/renderD128
+      # Pass the entire Direct Rendering Interface directory
+      - /dev/dri:/dev/dri
+    
     restart: unless-stopped
 
   ##################################################

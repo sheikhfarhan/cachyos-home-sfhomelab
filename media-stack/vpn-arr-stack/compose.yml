@@ -27,21 +27,17 @@ services:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.sfhomelab.com:100.110.20.2"
     ports:
-      - 8001:8000 # Gluetun Control Server
-      # --- QBITTORRENT PORTS ---
-      - 8080:8080 # qBittorrent Web UI (Host Port: 8080)
-      #- 6881:6881       # QBT P2P Port (TCP) commented since using Airvpn Port Forwarding
-      #- 6881:6881/udp   # QBT P2P Port (UDP) commented using Airvpn Port Forwarding
-      # --- TRANSMISSION PORTS ---
-      - 9091:9091 # Trans Web UI (Host Port: 9091)
-      #- 6882:6882       # Trans P2P Port (TCP) commented since using Airvpn Port Forwarding
-      #- 6882:6882/udp   # Trans P2P Port (UDP) commented since using Airvpn Port Forwarding
-      # --- PROWLARR PORT ---
-      #- 9696:9696 # Prowlarr Web UI
-      # --- FLARESOLVERR PORT ---
-      #- 8191:8191 # FlareSolverr Web UI
-      # --- SPEEDTEST-TRACKER ---
-      #- 8085:80
+      # --- GLUETUN CONTROL SERVER ---
+      - "100.110.20.1:8001:8000" # Tailscale Access
+      - "127.0.0.1:8001:8000"    # Localhost/SSH Access
+
+      # --- QBITTORRENT WEB UI ---
+      - "100.110.20.1:8080:8080" # Tailscale Access
+      - "127.0.0.1:8080:8080"    # Localhost/SSH Access
+
+      # --- TRANSMISSION WEB UI ---
+      - "100.110.20.1:9091:9091" # Tailscale Access
+      - "127.0.0.1:9091:9091"    # Localhost/SSH Access
     volumes:
       # personal preference to split the config and auth folder locally. With only ./gluetun:/gluetun will also simply work
       - ./gluetun/config:/gluetun
@@ -147,7 +143,10 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
     ports:
-      - 9696:9696
+    # Allows secure access via Tailscale mesh
+      - "100.110.20.1:9696:9696"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:9696:9696"
     dns:
       - 1.1.1.1
       - 8.8.8.8
@@ -177,7 +176,10 @@ services:
     #sysctls:
     #  - net.ipv6.conf.all.disable_ipv6=1
     ports:
-      - 9117:9117 # default port for the Web UI
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:9117:9117"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:9117:9117" 
     dns:
       - 1.1.1.1
       - 8.8.8.8
@@ -221,7 +223,10 @@ services:
       - /mnt/vault/media:/media
       - /mnt/crucial500/downloads:/downloads
     ports:
-      - 7878:7878
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:7878:7878"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:7878:7878"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
@@ -251,7 +256,10 @@ services:
       - /mnt/vault/media:/media
       - /mnt/crucial500/downloads:/downloads
     ports:
-      - 8989:8989
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:8989:8989"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:8989:8989"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
@@ -280,7 +288,10 @@ services:
       - ./bazarr/config:/config
       - /mnt/vault/media:/media
     ports:
-      - 6767:6767
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:6767:6767"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:6767:6767"
     restart: unless-stopped
     depends_on:
       radarr:
@@ -299,7 +310,10 @@ services:
         ipv4_address: 172.20.0.21
         ipv6_address: fd00:dead:beef:2::21
     ports:
-      - 8191:8191
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:8191:8191"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:8191:8191"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -328,7 +342,10 @@ services:
         ipv4_address: 172.20.0.19
         ipv6_address: fd00:dead:beef:2::19
     ports:
-      - 6868:6868 # Default port for the Web UI
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:6868:6868"
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:6868:6868"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -363,24 +380,4 @@ services:
 #    restart: unless-stopped
 #    depends_on:
 #      - gluetun
-
-  ##################################################
-  # 11. RECYCLARR
-  ##################################################
-  #recyclarr:
-  #  image: ghcr.io/recyclarr/recyclarr
-  #  container_name: recyclarr
-  #  hostname: recyclarr
-  #  networks:
-  #    dockerapps-net:
-  #      ipv4_address: 172.20.0.38
-  #      ipv6_address: 2001:db8:abc2::38
-  #  user: 1000:1000
-  #  volumes:
-  #    - ./recyclarr/config:/config
-  #  environment:
-  #    - TZ=${TZ}
-  #    - SONARR_API_KEY=${SONARR_API_KEY}
-  #    - RADARR_API_KEY=${RADARR_API_KEY}
-  #  restart: unless-stopped
 

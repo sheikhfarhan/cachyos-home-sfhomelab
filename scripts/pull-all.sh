@@ -6,6 +6,10 @@ BASE_DIR="/home/sfarhan/homelab/services"
 # List of paths relative to BASE_DIR containing a compose.yml file
 # Updated to match our folders' structure
 STACKS=(
+
+    # --- Gateway Stack ---
+  "gateway-stack/caddy"
+
   # --- Ops Stack ---
   "ops-stack/kopia"
   "ops-stack/crowdsec"

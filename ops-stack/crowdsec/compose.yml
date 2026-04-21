@@ -15,14 +15,13 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      # ADDED: additional collections and scenarios (#crowdsecurity/caddy #baudneo/gotify-bf)
-      - COLLECTIONS=crowdsecurity/http-cve crowdsecurity/base-http-scenarios crowdsecurity/whitelist-good-actors crowdsecurity/linux LePresidente/jellyfin 
+      # ADDED: additional collections and scenarios
+      - COLLECTIONS=crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/base-http-scenarios crowdsecurity/whitelist-good-actors crowdsecurity/linux LePresidente/jellyfin 
       - SCENARIOS=crowdsecurity/http-probing LePresidente/jellyfin-bf crowdsecurity/http-generic-bf
     volumes:
       - ./config:/etc/crowdsec:rw
       - ./acquis.yaml:/etc/crowdsec/acquis.yaml:ro
-      #have pivoted caddy over to vps
-      #- /home/sfarhan/homelab/services/gateway-stack/caddy/logs:/var/log/caddy:ro
+      - /home/sfarhan/homelab/services/gateway-stack/caddy/logs:/var/log/caddy:ro
       #Mount Jellyfin's Logs - note to add filename log to acquis.yaml too
       - /home/sfarhan/homelab/services/media-stack/jellyfin/jellyfin-config/log:/var/log/jellyfin:ro
       - ./data:/var/lib/crowdsec/data/

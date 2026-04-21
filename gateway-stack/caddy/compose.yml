@@ -25,7 +25,7 @@ services:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
       - ROOT_DOMAIN=${ROOT_DOMAIN}
       # Caddy comms with Crowdsec
-      - CROWDSEC_LAPI_URL=http://crowdsec:8080
+      - CROWDSEC_LAPI_URL=http://172.20.0.24:8080
       - CROWDSEC_API_KEY=${CROWDSEC_API_KEY}
       # This is for Caddy's basic_auth if we were to reverse proxy goaccess to a site via caddy
       #- LOGS_USER=${LOGS_USER}
@@ -37,8 +37,6 @@ services:
       - ./logs:/var/log/caddy             
       # Mount the Maxmind Folder - Caddy will read from /etc/caddy/maxmind/GeoLite2-Country.mmdb
       - ./maxmind:/etc/caddy/maxmind:ro
-      # Since we no longer serving goaccess via a sub-domain through caddy anymore, commenting this out
-      # - ./goaccess/html:/srv/goaccess-report
     restart: unless-stopped
 
 # ------------------------------------------------
