@@ -38,6 +38,7 @@
 **/jellyfin-config/data/data/subtitles/
 **/jellyfin-config/data/data/attachments/
 **/jellyfin-config/data/metadata/
+**/jellyfin-config/data/data/trickplay/
 
 # CrowdSec (Downloaded Rules)
 # We backup config.yaml/acquis.yaml, but ignore the auto-downloaded rules
