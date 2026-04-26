@@ -36,17 +36,25 @@
 # ==============================================================================
 
 (logging) {
-    # 1. Ignore internal LAN and Tailscale routing
-    @internal {
-        remote_ip 100.110.20.0/24 172.20.0.0/24 192.168.0.0/16 127.0.0.1 fd00:dead:beef:2::/64 ::1
+    # Match direct connections (Grey-Clouded Jellyfin)
+    @internal_direct {
+        remote_ip 172.20.0.0/24 172.21.0.0/24 192.168.0.0/16 100.64.0.0/10 127.0.0.1 fd00:dead:beef:2::/64 fd00:dead:beef:3::/64 ::1 116.88.98.114 2406:3003:2000:e9b::/64
+    }
+    
+    # Match proxied connections (Orange-Clouded services)
+    @internal_proxy {
+        client_ip 172.20.0.0/24 172.21.0.0/24 192.168.0.0/16 100.64.0.0/10 127.0.0.1 fd00:dead:beef:2::/64 fd00:dead:beef:3::/64 ::1 116.88.98.114 2406:3003:2000:e9b::/64
     }
 
-    # 2. Ignore Uptime Kuma pings (matches the specific User-Agent)
+    # Match Uptime Kuma User-Agent
     @kuma_pings {
         header User-Agent *Uptime-Kuma*
     }
-    log_skip @internal
+
+    log_skip @internal_direct
+    log_skip @internal_proxy
     log_skip @kuma_pings
+
     log {
         output file /var/log/caddy/access.log {
             roll_size 10mb
