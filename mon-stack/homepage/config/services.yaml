@@ -263,6 +263,6 @@
     - GoAccess:
         icon: goaccess.png
         href: https://goaccess.{{HOMEPAGE_VAR_ROOT_DOMAIN}}  
-        description: Web Loggins
+        description: Web Log Analysis
         server: ovh-vps-remote
         container: goaccess
