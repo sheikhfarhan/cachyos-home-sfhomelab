@@ -130,9 +130,10 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.32
         ipv6_address: fd00:dead:beef:2::32
-    ports:
-      # CRITICAL: Expose this port so the VPS Hub can scrape it via Tailscale!
-      - "45876:45876"
+    # No longer need for ports for Push Mode!
+    #ports:
+      # Expose this port so the VPS Hub can scrape it via Tailscale!
+      #- "45876:45876"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
@@ -144,6 +145,8 @@ services:
       - TOKEN=${BESZEL_CACHYOS_TOKEN}
       - DOCKER_HOST=tcp://socket-proxy:2375
       - FILESYSTEM=/dev/nvme0n1p2
+      # NEW: Enable Push Mode via WebSockets (Point to Beszel Hub via Tailscale Net)
+      - HUB_URL=http://100.110.20.2:8090
     volumes:
       - ./beszel/beszel_agent_data:/var/lib/beszel-agent
       - /:/extra-filesystems/nvme0n1__CachyOS:ro
