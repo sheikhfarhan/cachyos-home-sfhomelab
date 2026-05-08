@@ -63,7 +63,10 @@ services:
         ipv4_address: 172.20.0.12
         ipv6_address: fd00:dead:beef:2::12
     ports:
-      - 5055:5055
+      # Allows secure access via Tailscale mesh (from the VPS Caddy)
+      - "100.110.20.1:5055:5055"
+      # Allows local access via CachyOS terminal or SSH tunnel (Glass-Break)
+      - "127.0.0.1:5055:5055"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
