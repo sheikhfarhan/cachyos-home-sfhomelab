@@ -70,6 +70,7 @@ mon-stack/homepage/config/*
 !mon-stack/homepage/config/services.yaml
 !mon-stack/homepage/config/settings.yaml
 !mon-stack/homepage/config/widgets.yaml
+!mon-stack/homepage/config/docker.yaml
 
 # --- CrowdSec (Inside gateway-stack) ---
 # We want to track custom acquisition rules

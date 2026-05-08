@@ -1,0 +1,22 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/docker/
+
+# my-docker:
+#   host: 127.0.0.1
+#   port: 2375
+
+# my-docker:
+#   socket: /var/run/docker.sock
+
+# Local Node (CachyOS)
+# Homepage talks to the local proxy via the internal docker network
+cachyos-local:
+  host: 172.20.0.28
+  port: 2375
+
+# Remote Node (OVH-VPS)
+# Homepage reaches across the Tailscale mesh to the VPS proxy
+ovh-vps-remote:
+  host: 100.110.20.2
+  port: 2375

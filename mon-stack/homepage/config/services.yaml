@@ -201,7 +201,7 @@
         href: https://status.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
         description: Edge Router & Web Server
         server: ovh-vps-remote
-        container: caddy
+        container: vps-caddy
         widget:
           type: caddy
           url: http://100.110.20.2:2019/

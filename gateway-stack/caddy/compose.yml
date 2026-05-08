@@ -8,8 +8,8 @@ services:
 # ------------------------------------------------
   caddy:
     image: serfriz/caddy-cloudflare-ddns-crowdsec-geoip:latest
-    container_name: caddy
-    hostname: caddy
+    container_name: cachyos-caddy
+    hostname: cachyos-caddy
     networks:
       dockerapps-net:
         # Caddy's internal static IP
@@ -44,7 +44,7 @@ services:
 # ------------------------------------------------
   maxmind:
     image: ghcr.io/maxmind/geoipupdate
-    container_name: maxmind
+    container_name: cachyos-maxmind
     networks:
       dockerapps-net:
         ipv4_address: 172.20.0.30
