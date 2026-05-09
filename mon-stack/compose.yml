@@ -18,6 +18,7 @@ services:
     # ADD THIS FOR TAILSCALE PORT BINDING (for Remote Access to Docker API)
     ports:
       - "100.110.20.1:2375:2375"
+      - "[fd7a:115c:a1e0::5a39:3504]:2375:2375"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
@@ -60,6 +61,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:3000:3000"
+      - "[fd7a:115c:a1e0::5a39:3504]:3000:3000" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:3000:3000"
     extra_hosts:
@@ -107,6 +109,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:9090:8080"
+      - "[fd7a:115c:a1e0::5a39:3504]:9090:8080" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:9090:8080"
     extra_hosts:
@@ -171,6 +174,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:3552:3552"
+      - "[fd7a:115c:a1e0::5a39:3504]:3552:3552" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:3552:3552"
     extra_hosts:

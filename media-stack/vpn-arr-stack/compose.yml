@@ -16,7 +16,7 @@ services:
       - SYS_MODULE
     devices:
       - /dev/net/tun:/dev/net/tun
-      # This setting ensures IPv6 is enabled INSIDE the container
+    # This setting ensures IPv6 is enabled INSIDE the container
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     networks:
@@ -29,14 +29,17 @@ services:
     ports:
       # --- GLUETUN CONTROL SERVER ---
       - "100.110.20.1:8001:8000" # Tailscale Access
+      - "[fd7a:115c:a1e0::5a39:3504]:8001:8000" # IPv6 Access
       - "127.0.0.1:8001:8000"    # Localhost/SSH Access
 
       # --- QBITTORRENT WEB UI ---
       - "100.110.20.1:8080:8080" # Tailscale Access
+      - "[fd7a:115c:a1e0::5a39:3504]:8080:8080" # IPv6 Access
       - "127.0.0.1:8080:8080"    # Localhost/SSH Access
 
       # --- TRANSMISSION WEB UI ---
       - "100.110.20.1:9091:9091" # Tailscale Access
+      - "[fd7a:115c:a1e0::5a39:3504]:9091:9091" # IPv6 Access
       - "127.0.0.1:9091:9091"    # Localhost/SSH Access
     volumes:
       # personal preference to split the config and auth folder locally. With only ./gluetun:/gluetun will also simply work
@@ -117,13 +120,13 @@ services:
     volumes:
       - ./transmission/config:/config
       - /mnt/crucial500/downloads:/downloads
-    healthcheck:
-      # We just want to know if the port is open!
-      test: curl -s http://localhost:9091/ || exit 1
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 20s
+    #healthcheck:
+    #  # We just want to know if the port is open!
+    #  test: curl -s http://localhost:9091/ || exit 1
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 3
+    #  start_period: 20s
     restart: unless-stopped
     depends_on:
       gluetun:
@@ -139,12 +142,13 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.20
         ipv6_address: fd00:dead:beef:2::20
-    # Forces container to use IPv4 only for outgoing connections
+    # This setting ensures IPv6 is enabled INSIDE the container
     sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1
+      - net.ipv6.conf.all.disable_ipv6=0
     ports:
     # Allows secure access via Tailscale mesh
       - "100.110.20.1:9696:9696"
+      - "[fd7a:115c:a1e0::5a39:3504]:9696:9696" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:9696:9696"
     dns:
@@ -172,12 +176,13 @@ services:
       dockerapps-net: 
         ipv4_address: 172.20.0.22
         ipv6_address: fd00:dead:beef:2::22
-    # Forces container to use IPv4 only for outgoing connections
-    #sysctls:
-    #  - net.ipv6.conf.all.disable_ipv6=1
+    # This setting ensures IPv6 is enabled INSIDE the container
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:9117:9117"
+      - "[fd7a:115c:a1e0::5a39:3504]:9117:9117" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:9117:9117" 
     dns:
@@ -225,6 +230,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:7878:7878"
+      - "[fd7a:115c:a1e0::5a39:3504]:7878:7878" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:7878:7878"
     extra_hosts:
@@ -258,6 +264,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:8989:8989"
+      - "[fd7a:115c:a1e0::5a39:3504]:8989:8989" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:8989:8989"
     extra_hosts:
@@ -290,6 +297,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:6767:6767"
+      - "[fd7a:115c:a1e0::5a39:3504]:6767:6767" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:6767:6767"
     restart: unless-stopped
@@ -312,6 +320,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:8191:8191"
+      - "[fd7a:115c:a1e0::5a39:3504]:8191:8191" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:8191:8191"
     environment:
@@ -344,6 +353,7 @@ services:
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:6868:6868"
+      - "[fd7a:115c:a1e0::5a39:3504]:6868:6868" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:6868:6868"
     environment:
