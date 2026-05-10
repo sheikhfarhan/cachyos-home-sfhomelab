@@ -240,8 +240,6 @@ services:
     depends_on:
       qbittorrent:
         condition: service_healthy
-      transmission:
-        condition: service_healthy
   ##################################################
   # 6. SONARR (TV Show Management)
   ##################################################
@@ -273,8 +271,6 @@ services:
     restart: unless-stopped
     depends_on:
       qbittorrent:
-        condition: service_healthy
-      transmission:
         condition: service_healthy
   ##################################################
   # 7. BAZARR (Subtitle/Caption Manager)
