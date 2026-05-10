@@ -90,7 +90,7 @@ services:
       - /mnt/crucial500:/mnt/scratch_disk:ro      # <-- NEW: Points to the SSD Scratch Drive
     restart: unless-stopped
     depends_on:
-      cachyos-home-socket-proxy:
+      socket-proxy:
         condition: service_started
 
   ##################################################
@@ -120,7 +120,7 @@ services:
       - DOCKER_HOST=tcp://172.20.0.28:2375
     restart: unless-stopped
     depends_on:
-      - cachyos-home-socket-proxy
+      - socket-proxy
 
   ##################################################
   # 4. BESZEL AGENT (Metrics Collector for CachyOS)
@@ -158,7 +158,7 @@ services:
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
     restart: unless-stopped
     depends_on:
-      - cachyos-home-socket-proxy
+      - socket-proxy
 
   ##################################################
   # 5. ARCANE
@@ -197,4 +197,4 @@ services:
       start_period: 20s
     restart: unless-stopped
     depends_on:
-      - cachyos-home-socket-proxy
+      - socket-proxy
