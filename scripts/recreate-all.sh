@@ -22,7 +22,7 @@ cd "$OPS/crowdsec" && docker compose up -d --force-recreate
 # --- Step 2: Caddy  ---
 
 echo "[2/5] Re-creating Caddy (Reverse Proxy)..."
-cd "$GATEWAY/caddy" && docker compose up -d --force-recreate
+cd "$GATEWAY/cachyos-caddy" && docker compose up -d --force-recreate
 
 # --- Step 3: Monitoring & Management ---
 # We do this early so the Socket Proxy is ready if other apps need it
