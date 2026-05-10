@@ -75,7 +75,7 @@ services:
       - TZ=${TZ}
       - HOMEPAGE_ALLOWED_HOSTS=*
       # Use the Proxy instead of the Socket
-      - DOCKER_HOST=tcp://cachyos-home-socket-proxy:2375
+      - DOCKER_HOST=tcp://172.20.0.28:2375
       # Our services.yaml href's URL can lookup .env file for the root domain
       - HOMEPAGE_VAR_ROOT_DOMAIN=${HOMEPAGE_VAR_ROOT_DOMAIN}
       - HOMEPAGE_VAR_KOPIA_USER=${HOMEPAGE_VAR_KOPIA_USER}
@@ -117,7 +117,7 @@ services:
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
     environment:
       # Use the Proxy
-      - DOCKER_HOST=tcp://cachyos-home-socket-proxy:2375
+      - DOCKER_HOST=tcp://172.20.0.28:2375
     restart: unless-stopped
     depends_on:
       - cachyos-home-socket-proxy
@@ -146,7 +146,7 @@ services:
       # This MUST match the key generated in the VPS Hub UI
       - KEY=${BESZEL_PUBLIC_KEY}
       - TOKEN=${BESZEL_CACHYOS_TOKEN}
-      - DOCKER_HOST=tcp://cachyos-home-socket-proxy:2375
+      - DOCKER_HOST=tcp://172.20.0.28:2375
       - FILESYSTEM=/dev/nvme0n1p2
       # NEW: Enable Push Mode via WebSockets (Point to Beszel Hub via Tailscale Net)
       - HUB_URL=http://100.110.20.2:8090
@@ -184,7 +184,7 @@ services:
       - ./arcane/arcane-data:/app/data
     environment:
       - APP_URL=http://localhost:3552
-      - DOCKER_HOST=tcp://cachyos-home-socket-proxy:2375
+      - DOCKER_HOST=tcp://172.20.0.28:2375
       - PUID=${PUID}
       - PGID=${PGID}
       - ENCRYPTION_KEY=${ARCANE_KEY}
