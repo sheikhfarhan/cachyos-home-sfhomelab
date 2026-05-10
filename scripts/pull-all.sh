@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "--- 🐳 Pulling Updates for All Stacks ---"
 
-BASE_DIR="/home/sfarhan/homelab/services"
+BASE_DIR="/home/sfarhan/homelab/cachyos-home"
 
 # List of paths relative to BASE_DIR containing a compose.yml file
 # Updated to match our folders' structure

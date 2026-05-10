@@ -39,7 +39,7 @@ services:
       - ./logs:/app/logs
       # 2. SOURCE DATA (Mounting our Homelab Pool)
       # We mount it to /data so Kopia sees the whole structure
-      - /home/sfarhan/homelab/services:/data/homelab-services:ro
+      - /home/sfarhan/homelab/cachyos-home:/data/homelab-services:ro
       # This is for when we want to restore to a particular folder first
       - /home/sfarhan/kopia-restores:/restore-target
 

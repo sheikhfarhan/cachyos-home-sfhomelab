@@ -6,7 +6,7 @@ echo "This will take a moment as all containers are spun down..."
 echo ""
 
 # Define the absolute path to our stacks
-BASE_DIR="/home/sfarhan/homelab/services"
+BASE_DIR="/home/sfarhan/homelab/cachyos-home"
 
 # Define Sub-Stack Paths for cleaner code
 GATEWAY="$BASE_DIR/gateway-stack"

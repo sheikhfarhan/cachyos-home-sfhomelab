@@ -1,5 +1,5 @@
 #!/bin/bash
-BASE_DIR="/home/sfarhan/homelab/services"
+BASE_DIR="/home/sfarhan/homelab/cachyos-home"
 
 echo "--- 🔎 Auto-Discovering and Pulling Stacks ---"
 
