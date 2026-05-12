@@ -1,0 +1,48 @@
+networks:
+  dockerapps-net:
+    external: true
+
+##################################################
+# HOMEPAGE (Dashboard)
+##################################################
+services:
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    hostname: homepage
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.25
+        ipv6_address: fd00:dead:beef:2::25
+    ports:
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:3000:3000"
+      - "[fd7a:115c:a1e0::5a39:3504]:3000:3000" # IPv6 Access
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:3000:3000"
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+    env_file:
+      - .env
+    environment:
+      - PUID=1000
+      - PGID=951
+      - TZ=${TZ}
+      - HOMEPAGE_ALLOWED_HOSTS=*
+      # Use the Proxy instead of the Socket
+      - DOCKER_HOST=tcp://172.20.0.28:2375
+      # Our services.yaml href's URL can lookup .env file for the root domain
+      - HOMEPAGE_VAR_ROOT_DOMAIN=${HOMEPAGE_VAR_ROOT_DOMAIN}
+      - HOMEPAGE_VAR_KOPIA_USER=${HOMEPAGE_VAR_KOPIA_USER}
+      - HOMEPAGE_VAR_KOPIA_PASS=${HOMEPAGE_VAR_KOPIA_PASS}
+      - HOMEPAGE_VAR_ARCANE_API_KEY=${HOMEPAGE_VAR_ARCANE_API_KEY}
+    volumes:
+      - ./config:/app/config
+      - ./config/icons:/app/public/icons
+      - ./config/images:/app/public/images
+      # Host Disk Mounts
+      - /mnt/vault:/mnt/vault_disk:ro             # <-- NEW: Points to the HDD Vault
+      - /mnt/crucial500:/mnt/scratch_disk:ro      # <-- NEW: Points to the SSD Scratch Drive
+    restart: unless-stopped

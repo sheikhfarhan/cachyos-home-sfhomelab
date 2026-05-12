@@ -1,0 +1,49 @@
+networks:
+  dockerapps-net:
+    external: true
+
+services:
+  ##################################################
+  # DOCKER SOCKET PROXY (The Gatekeeper)
+  ##################################################
+  # This container is the ONLY one that touches the real socket.
+  # All other apps talk to this proxy via TCP.
+  socket-proxy:
+    image: lscr.io/linuxserver/socket-proxy:latest
+    container_name: cachyos-home-socket-proxy
+    hostname: cachyos-home-socket-proxy
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.28
+        ipv6_address: fd00:dead:beef:2::28
+    # ADD THIS FOR TAILSCALE PORT BINDING (for Remote Access to Docker API)
+    ports:
+      - "100.110.20.1:2375:2375"
+      - "[fd7a:115c:a1e0::5a39:3504]:2375:2375"
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+    environment:
+      # READ ACCESS (Allowed)
+      - CONTAINERS=1
+      - IMAGES=1
+      - INFO=1
+      - NETWORKS=1
+      - EXEC=1
+      - VOLUMES=1
+      - SERVICES=1    # (Optional, good for stack viewing)
+      - TASKS=1       # (Optional)
+      - EVENTS=1      # Critical for real-time updates
+      - PING=1
+      - VERSION=1
+      # WRITE ACCESS (Blocked by Default - "Read Only" Mode)
+      # This prevents Homepage/Portainer/Arcane from creating/deleting containers.
+      # If we need to manage containers via Portainer/Arcane, change POST to 1.
+      - POST=1
+      - DELETE=1
+      - AUTH=0
+      - SECRETS=0
+      - LOG_LEVEL=warning
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
