@@ -10,8 +10,8 @@ services:
   # All other apps talk to this proxy via TCP.
   socket-proxy:
     image: lscr.io/linuxserver/socket-proxy:latest
-    container_name: cachyos-home-socket-proxy
-    hostname: cachyos-home-socket-proxy
+    container_name: cachyos-socket-proxy
+    hostname: cachyos-socket-proxy
     networks:
       dockerapps-net:
         ipv4_address: 172.20.0.28
