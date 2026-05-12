@@ -324,9 +324,6 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - LOG_LEVEL=info
-      - LOG_FILE=/config/flaresolverr.log
-    volumes:
-      - ./flaresolverr/config:/config
     healthcheck:
       test: curl -f --silent --output /dev/null http://localhost:8191/ || exit 1
       interval: 5m        # Check every 5 minutes (Quiet logs)
