@@ -19,7 +19,7 @@ cache/
 .cache/
 store/
 html/
-maxmind/
+cachyos-maxmind/
 beszel_agent_data/
 db/
 state/
