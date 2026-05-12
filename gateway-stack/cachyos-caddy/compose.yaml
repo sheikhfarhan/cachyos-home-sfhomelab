@@ -36,26 +36,5 @@ services:
       - ./config:/config                  # For Caddy's internal config
       - ./logs:/var/log/caddy             
       # Mount the Maxmind Folder - Caddy will read from /etc/caddy/maxmind/GeoLite2-Country.mmdb
-      - ./maxmind:/etc/caddy/maxmind:ro
-    restart: unless-stopped
-
-# ------------------------------------------------
-# 2. MAXMIND UPDATER (Auto-Updates Geo-IP DBs)
-# ------------------------------------------------
-  maxmind:
-    image: ghcr.io/maxmind/geoipupdate
-    container_name: cachyos-maxmind
-    networks:
-      dockerapps-net:
-        ipv4_address: 172.20.0.30
-        ipv6_address: fd00:dead:beef:2::30
-    user: "${PUID}:${PGID}"
-    environment:
-      - GEOIPUPDATE_ACCOUNT_ID=${MAXMIND_ACCOUNT_ID}
-      - GEOIPUPDATE_LICENSE_KEY=${MAXMIND_LICENSE_KEY}
-      - GEOIPUPDATE_EDITION_IDS=GeoLite2-Country
-      - GEOIPUPDATE_FREQUENCY=72
-    volumes:
-      # Maps local 'maxmind' folder to the container's data folder
-      - ./maxmind:/usr/share/GeoIP
+      - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-maxmind/data:/etc/caddy/maxmind:ro
     restart: unless-stopped
