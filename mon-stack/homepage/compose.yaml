@@ -34,10 +34,10 @@ services:
       # Use the Proxy instead of the Socket
       - DOCKER_HOST=tcp://172.20.0.28:2375
       # Our services.yaml href's URL can lookup .env file for the root domain
-      - HOMEPAGE_VAR_ROOT_DOMAIN=${HOMEPAGE_VAR_ROOT_DOMAIN}
-      - HOMEPAGE_VAR_KOPIA_USER=${HOMEPAGE_VAR_KOPIA_USER}
-      - HOMEPAGE_VAR_KOPIA_PASS=${HOMEPAGE_VAR_KOPIA_PASS}
-      - HOMEPAGE_VAR_ARCANE_API_KEY=${HOMEPAGE_VAR_ARCANE_API_KEY}
+      #- HOMEPAGE_VAR_ROOT_DOMAIN=${HOMEPAGE_VAR_ROOT_DOMAIN}
+      #- HOMEPAGE_VAR_KOPIA_USER=${HOMEPAGE_VAR_KOPIA_USER}
+      #- HOMEPAGE_VAR_KOPIA_PASS=${HOMEPAGE_VAR_KOPIA_PASS}
+      #- HOMEPAGE_VAR_ARCANE_API_KEY=${HOMEPAGE_VAR_ARCANE_API_KEY}
     volumes:
       - ./config:/app/config
       - ./config/icons:/app/public/icons
