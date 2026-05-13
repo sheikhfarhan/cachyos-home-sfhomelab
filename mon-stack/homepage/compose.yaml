@@ -31,9 +31,11 @@ services:
       - PGID=951
       - TZ=${TZ}
       - HOMEPAGE_ALLOWED_HOSTS=*
-      # Use the Proxy instead of the Socket
-      - DOCKER_HOST=tcp://172.20.0.28:2375
-       Our services.yaml href's URL can lookup .env file for the root domain
+      # Since we are using docker.yaml to tell Homepage where our proxy is
+      # No need to use the Proxy
+      # If we are using the Proxy instead of the Socket
+      # - DOCKER_HOST=tcp://172.20.0.28:2375
+      # Our services.yaml href's URL can lookup .env file for the root domain
       - HOMEPAGE_VAR_ROOT_DOMAIN=${HOMEPAGE_VAR_ROOT_DOMAIN}
       - HOMEPAGE_VAR_KOPIA_USER=${HOMEPAGE_VAR_KOPIA_USER}
       - HOMEPAGE_VAR_KOPIA_PASS=${HOMEPAGE_VAR_KOPIA_PASS}
