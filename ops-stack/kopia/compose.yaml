@@ -33,10 +33,10 @@ services:
       - KOPIA_PASSWORD=${KOPIA_REPO_PASSWORD}
     volumes:
       # 1. Kopia State (Config & Cache)
-      - ./config:/app/config
-      - ./cache:/app/cache
-      - ./data:/app/data:ro
-      - ./logs:/app/logs
+      - /home/sfarhan/homelab/cachyos-home/ops-stack/kopia/config:/app/config
+      - /home/sfarhan/homelab/cachyos-home/ops-stack/kopia/cache:/app/cache
+      - /home/sfarhan/homelab/cachyos-home/ops-stack/kopia/data:/app/data:ro
+      - /home/sfarhan/homelab/cachyos-home/ops-stack/kopia/logs:/app/logs
       # 2. SOURCE DATA (Mounting our Homelab Pool)
       # We mount it to /data so Kopia sees the whole structure
       - /home/sfarhan/homelab/cachyos-home:/data/homelab-services:ro

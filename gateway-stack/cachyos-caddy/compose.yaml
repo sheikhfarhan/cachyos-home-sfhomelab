@@ -31,10 +31,10 @@ services:
       #- LOGS_USER=${LOGS_USER}
       #- LOGS_PASS_HASH=${LOGS_PASS_HASH}
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile # Caddy's config file
-      - ./data:/data                      # For certs & persistent data
-      - ./config:/config                  # For Caddy's internal config
-      - ./logs:/var/log/caddy             
+      - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-caddy/Caddyfile:/etc/caddy/Caddyfile # Caddy's config file
+      - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-caddy/data:/data                      # For certs & persistent data
+      - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-caddy/config:/config                  # For Caddy's internal config
+      - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-caddy/logs:/var/log/caddy             
       # Mount the Maxmind Folder - Caddy will read from /etc/caddy/maxmind/GeoLite2-Country.mmdb
       - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-maxmind/data:/etc/caddy/maxmind:ro
     restart: unless-stopped

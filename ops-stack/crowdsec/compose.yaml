@@ -19,12 +19,12 @@ services:
       - COLLECTIONS=crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/base-http-scenarios crowdsecurity/whitelist-good-actors crowdsecurity/linux LePresidente/jellyfin 
       - SCENARIOS=crowdsecurity/http-probing LePresidente/jellyfin-bf crowdsecurity/http-generic-bf
     volumes:
-      - ./config:/etc/crowdsec:rw
-      - ./acquis.yaml:/etc/crowdsec/acquis.yaml:ro
+      - /home/sfarhan/homelab/cachyos-home/ops-stack/crowdsec/config:/etc/crowdsec:rw
+      - /home/sfarhan/homelab/cachyos-home/ops-stack/crowdsec/acquis.yaml:/etc/crowdsec/acquis.yaml:ro
       - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-caddy/logs:/var/log/caddy:ro
       #Mount Jellyfin's Logs - note to add filename log to acquis.yaml too
       - /home/sfarhan/homelab/cachyos-home/media-stack/jellyfin/jellyfin-config/log:/var/log/jellyfin:ro
-      - ./data:/var/lib/crowdsec/data/
+      - /home/sfarhan/homelab/cachyos-home/ops-stack/crowdsec/data:/var/lib/crowdsec/data/
       # Added Docker Socket to monitor VoidAuth's instance - not yet configured with Crowdsec
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped

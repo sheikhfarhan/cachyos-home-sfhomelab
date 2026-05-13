@@ -20,5 +20,5 @@ services:
       - GEOIPUPDATE_FREQUENCY=72
     volumes:
       # Maps local 'maxmind' folder to the container's data folder
-      - ./data:/usr/share/GeoIP
+      - /home/sfarhan/homelab/cachyos-home/gateway-stack/cachyos-maxmind/data:/usr/share/GeoIP
     restart: unless-stopped

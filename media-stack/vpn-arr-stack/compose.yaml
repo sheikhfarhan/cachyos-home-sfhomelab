@@ -43,8 +43,8 @@ services:
       - "127.0.0.1:9091:9091"    # Localhost/SSH Access
     volumes:
       # personal preference to split the config and auth folder locally. With only ./gluetun:/gluetun will also simply work
-      - ./gluetun/config:/gluetun
-      - ./gluetun/auth:/gluetun/auth:ro
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/gluetun/config:/gluetun
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/gluetun/auth:/gluetun/auth:ro
       - /lib/modules:/lib/modules:ro
     environment:
       # --- General Settings
@@ -90,7 +90,7 @@ services:
       - WEBUI_PORT=8080 # This is the internal port. It is accessible on 8080 from the Gluetun service network.
       - WEBUI_HOST=* # Allows other containers to access the Web UI for integration
     volumes:
-      - ./qbittorrent/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/qbittorrent/config:/config
       - /mnt/crucial500/downloads:/downloads
     healthcheck:
       test: curl -f --silent --output /dev/null http://localhost:8080 || exit 1
@@ -118,7 +118,7 @@ services:
       - WEBUI_PORT=9091 # Internal Web UI port (must match Gluetun mapping)
       - PEERPORT=${AIRVPN_PORT_TRANS}
     volumes:
-      - ./transmission/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/transmission/config:/config
       - /mnt/crucial500/downloads:/downloads
     #healthcheck:
     #  # We just want to know if the port is open!
@@ -159,7 +159,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./prowlarr/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/prowlarr/config:/config
     depends_on:
       flaresolverr:
         condition: service_healthy
@@ -194,7 +194,7 @@ services:
       - TZ=${TZ}
       - AUTO_UPDATE=true #optional
     volumes:
-      - ./jackett/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/jackett/config:/config
       # This is for .torrent files, good practice
       - /mnt/crucial500/downloads/jackett:/downloads
     #healthcheck:
@@ -224,7 +224,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./radarr/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/radarr/config:/config
       - /mnt/vault/media:/media
       - /mnt/crucial500/downloads:/downloads
     ports:
@@ -256,7 +256,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./sonarr/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/sonarr/config:/config
       - /mnt/vault/media:/media
       - /mnt/crucial500/downloads:/downloads
     ports:
@@ -288,7 +288,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./bazarr/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/bazarr/config:/config
       - /mnt/vault/media:/media
     ports:
       # Allows secure access via Tailscale mesh
@@ -354,7 +354,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ./profilarr/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/profilarr/config:/config
     restart: unless-stopped
     depends_on:
       radarr:
