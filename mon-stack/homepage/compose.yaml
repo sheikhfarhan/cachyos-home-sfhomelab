@@ -21,6 +21,8 @@ services:
       - "[fd7a:115c:a1e0::5a39:3504]:3000:3000" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:3000:3000"
+    env_file:
+      - /home/sfarhan/homelab/cachyos-home/.env
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.${ROOT_DOMAIN}:100.110.20.2"
