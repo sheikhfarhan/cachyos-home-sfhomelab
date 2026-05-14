@@ -324,6 +324,8 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - LOG_LEVEL=info
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/vpn-arr-stack/flaresolverr/config:/config
     healthcheck:
       test: curl -f --silent --output /dev/null http://localhost:8191/ || exit 1
       interval: 5m        # Check every 5 minutes (Quiet logs)
