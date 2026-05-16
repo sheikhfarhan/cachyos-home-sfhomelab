@@ -11,6 +11,8 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.24
         ipv6_address: fd00:dead:beef:2::24
+    ports:
+      - "127.0.0.1:8088:8080" # Allows host bouncer to reach the API
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -27,4 +29,8 @@ services:
       - /home/sfarhan/homelab/cachyos-home/ops-stack/crowdsec/data:/var/lib/crowdsec/data/
       # Added Docker Socket to monitor VoidAuth's instance - not yet configured with Crowdsec
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Read host kernel logs for better detection of host-level attacks (like SSH brute force)
+      - /var/log/journal:/var/log/journal:ro
+      # Required for journalctl to work properly inside the container 
+      - /etc/machine-id:/etc/machine-id:ro   
     restart: unless-stopped

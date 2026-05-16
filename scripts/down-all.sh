@@ -28,7 +28,11 @@ cd "$MEDIA/jellyfin" && docker compose down
 
 # --- Step 4: Monitoring & Management ---
 echo "[4/5] Stopping Monitoring Stack (Homepage, Socket Proxy, Beszel)..."
-cd "$MON" && docker compose down
+cd "$MON/arcane" && docker compose down
+cd "$MON/beszel" && docker compose down
+cd "$MON/cachyos-socket-proxy" && docker compose down
+cd "$MON/dozzle" && docker compose down
+cd "$MON/homepage" && docker compose down
 
 # --- Step 5: Core & Security Infrastructure ---
 echo "[5/5] Stopping CrowdSec (Security Brain)..."
@@ -36,7 +40,9 @@ cd "$OPS/crowdsec" && docker compose down
 
 # --- Step 6: Gateway & Reverse Proxy ---
 echo "[6/6] Stopping Caddy (Reverse Proxy)..."
-cd "$GATEWAY/caddy" && docker compose down
+cd "$GATEWAY/cachyos-caddy" && docker compose down
+cd "$GATEWAY/cachyos-maxmind" && docker compose down
+
 
 echo ""
 echo "🛑 All stacks have been successfully shut down! Safe to perform maintenance."

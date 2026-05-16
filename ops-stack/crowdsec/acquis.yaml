@@ -1,12 +1,19 @@
+# Crowdsec Configuration for Caddy and Jellyfin Logs
 filenames:
   - /var/log/caddy/access.log
 labels:
   type: caddy
-
 ---
-# Jellyfin Logs
+# Configuration to monitor Jellyfin logs for brute force attempts and other suspicious activity
 filenames:
   - /var/log/jellyfin/log_*.log
 labels:
   type: jellyfin
+---
+# Host-level logs (like SSH brute force attempts)
+source: journalctl
+journalctl_filter:
+  - "_TRANSPORT=kernel"
+labels:
+  type: syslog
 
