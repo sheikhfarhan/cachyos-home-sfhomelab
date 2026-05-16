@@ -16,36 +16,39 @@ MON="$BASE_DIR/mon-stack"
 
 # --- Step 1 : CrowdSec First ---
 
-echo "[1/5] Re-creating CrowdSec..."
+echo "[1/7] Re-creating CrowdSec..."
 cd "$OPS/crowdsec" && docker compose up -d --force-recreate
 
-# --- Step 2: Caddy  ---
+# --- Step 2: Caddy & Maxmind  ---
 
-echo "[2/5] Re-creating Caddy (Reverse Proxy)..."
+echo "[2/7] Re-creating Caddy (Reverse Proxy)..."
 cd "$GATEWAY/cachyos-caddy" && docker compose up -d --force-recreate
+
+echo "[3/7] Re-creating Maxmind (IP Geolocation)..."
+cd "$GATEWAY/cachyos-maxmind" && docker compose up -d --force-recreate
 
 # --- Step 3: Monitoring & Management ---
 # We do this early so the Socket Proxy is ready if other apps need it
 
-echo "[3/5] Re-creating Monitoring Stack (Homepage, Socket Proxy, Beszel)..."
+echo "[4/7] Re-creating Monitoring Stack (Homepage, Socket Proxy, Beszel)..."
 cd "$MON" && docker compose up -d --force-recreate
 
-# --- Step 4: Media Core ---
+# --- Step 5: Media Core ---
 
-echo "[4/5] Re-creating Jellyfin Stack (Media & Requests)..."
+echo "[5/7] Re-creating Jellyfin Stack (Media & Requests)..."
 cd "$MEDIA/jellyfin" && docker compose up -d --force-recreate
 
-# --- Step 5: Automation Engine ---
+# --- Step 6: Automation Engine ---
 
-echo "[5/5] Re-creating VPN-ARR-Stack (Downloads & Managers)..."
+echo "[6/7] Re-creating VPN-ARR-Stack (Downloads & Managers)..."
 cd "$MEDIA/vpn-arr-stack" && docker compose up -d --force-recreate
 
-# --- Step 6: Analytics & Backups ---
+# --- Step 7: Analytics & Backups ---
 
-echo "[6/6] Re-creating Kopia (Backups)..."
+echo "[7/7] Re-creating Kopia (Backups)..."
 cd "$OPS/kopia" && docker compose up -d --force-recreate
 
-# --- Step 7: Housekeeping ---
+# --- Step 8: Housekeeping ---
 echo ""
 echo "🧹 Cleaning up old image layers..."
 docker image prune -f
