@@ -29,5 +29,5 @@ services:
       - TZ=${TZ}
       - UMASK=022
     volumes:
-      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/06-profilarr/config:/config
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/04-profilarr/config:/config
     restart: unless-stopped

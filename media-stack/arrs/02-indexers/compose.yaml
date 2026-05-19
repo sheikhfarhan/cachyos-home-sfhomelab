@@ -38,6 +38,7 @@ services:
     depends_on:
       flaresolverr:
         condition: service_healthy
+        restart: true
     restart: unless-stopped
 
 ##################################################
@@ -82,6 +83,7 @@ services:
     depends_on:
       flaresolverr:
         condition: service_healthy
+        restart: true
 
 ##################################################
 # FLARESOLVERR (Challenge Solver)

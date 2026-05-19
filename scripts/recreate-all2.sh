@@ -21,13 +21,13 @@ echo "⏳ Sleeping 10s to allow CrowdSec LAPI to boot..."
 sleep 10
 
 # --- Step 2: Caddy & Maxmind  ---
-echo "[2/7] Re-creating Caddy (Reverse Proxy)..."
-cd "$GATEWAY/cachyos-caddy" && docker compose up -d --force-recreate
-
-echo "[3/7] Re-creating Maxmind (IP Geolocation)..."
+echo "[2/7] Re-creating Maxmind (IP Geolocation)..."
 cd "$GATEWAY/cachyos-maxmind" && docker compose up -d --force-recreate
 echo "⏳ Sleeping 5s..."
 sleep 5
+
+echo "[3/7] Re-creating Caddy (Reverse Proxy)..."
+cd "$GATEWAY/cachyos-caddy" && docker compose up -d --force-recreate
 
 # --- Step 3: Monitoring & Management ---
 echo "[4/7] Re-creating Monitoring Stack (Homepage, Socket Proxy, Beszel)..."
@@ -42,33 +42,25 @@ echo "⏳ Sleeping 10s..."
 sleep 10
 
 # --- Step 5: Automation Engine (The Micro-Stacks) ---
-echo "[6/7] Initiating Multi-Stage VPN & ARR Deployment..."
+echo "[6/7] Initiating Multi-Stage Download & ARR Deployment..."
 
-echo "  -> [Tier 1] Re-creating VPN & Torrent Base (Gluetun/Qbit/Trans)..."
-cd "$MEDIA/vpn-arr-stack/gluetun" && docker compose up -d --force-recreate
+echo "  -> [Tier 1] Re-creating Network Gateway & Downloaders (01-dl-gateway)..."
+cd "$MEDIA/arrs/01-dl-gateway" && docker compose up -d --force-recreate
 echo "  ⏳ Sleeping 15s for VPN tunnel and network bridge to stabilize..."
+sleep 15
+
+echo "  -> [Tier 2] Re-creating Indexers & Solvers (02-indexers)..."
+cd "$MEDIA/arrs/02-indexers" && docker compose up -d --force-recreate
+echo "  ⏳ Sleeping 10s to allow Flaresolverr to boot and indexers to connect..."
 sleep 10
 
-echo "  -> [Tier 1] Re-creating Indexer Foundations (Flaresolverr)..."
-cd "$MEDIA/vpn-arr-stack/flaresolverr" && docker compose up -d --force-recreate
-echo "  ⏳ Sleeping 10s..."
-sleep 5
-
-echo "  -> [Tier 2] Re-creating Indexers (Prowlarr, Jackett)..."
-cd "$MEDIA/vpn-arr-stack/prowlarr" && docker compose up -d --force-recreate
-cd "$MEDIA/vpn-arr-stack/jackett" && docker compose up -d --force-recreate
-echo "  ⏳ Sleeping 5s..."
-sleep 5
-
-echo "  -> [Tier 3] Re-creating Core ARRs (Radarr, Sonarr)..."
-cd "$MEDIA/vpn-arr-stack/radarr" && docker compose up -d --force-recreate
-cd "$MEDIA/vpn-arr-stack/sonarr" && docker compose up -d --force-recreate
+echo "  -> [Tier 3] Re-creating Core ARRs & Subtitles (03-core-arrs)..."
+cd "$MEDIA/arrs/03-core-arrs" && docker compose up -d --force-recreate
 echo "  ⏳ Sleeping 10s to allow databases to initialize..."
-sleep 5
+sleep 10
 
-echo "  -> [Tier 4] Re-creating Metadata ARRs (Bazarr, Profilarr)..."
-cd "$MEDIA/vpn-arr-stack/bazarr" && docker compose up -d --force-recreate
-cd "$MEDIA/vpn-arr-stack/profilarr" && docker compose up -d --force-recreate
+echo "  -> [Tier 4] Re-creating Metadata syncs (04-profilarr)..."
+cd "$MEDIA/arrs/04-profilarr" && docker compose up -d --force-recreate
 echo "  ⏳ Sleeping 5s..."
 sleep 5
 

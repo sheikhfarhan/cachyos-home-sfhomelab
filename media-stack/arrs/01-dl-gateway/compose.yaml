@@ -103,6 +103,8 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+        restart: true
+
 ##################################################
 # 3. TRANSMISSION (Client 2)
 ##################################################
@@ -132,3 +134,4 @@ services:
     depends_on:
       gluetun:
         condition: service_healthy
+        restart: true
