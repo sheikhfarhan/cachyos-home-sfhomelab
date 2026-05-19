@@ -1,0 +1,117 @@
+# ----------------------------------------
+# Network Definition - Have already set this up beforehand
+# ----------------------------------------
+networks:
+  dockerapps-net:
+    external: true
+
+services:
+##################################################
+# PROWLARR (Indexer Manager)
+##################################################
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    hostname: prowlarr 
+    networks: 
+      dockerapps-net:
+        ipv4_address: 172.20.0.20
+        ipv6_address: fd00:dead:beef:2::20
+    # This setting ensures IPv6 is enabled INSIDE the container
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    ports:
+    # Allows secure access via Tailscale mesh
+      - "100.110.20.1:9696:9696"
+      - "[fd7a:115c:a1e0::5a39:3504]:9696:9696" # IPv6 Access
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:9696:9696"
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/prowlarr/config:/config
+    depends_on:
+      flaresolverr:
+        condition: service_healthy
+    restart: unless-stopped
+
+##################################################
+# JACKETT (Indexer 2) - NEW SERVICE
+##################################################
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    hostname: jackett
+    networks:
+      dockerapps-net: 
+        ipv4_address: 172.20.0.22
+        ipv6_address: fd00:dead:beef:2::22
+    # This setting ensures IPv6 is enabled INSIDE the container
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    ports:
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:9117:9117"
+      - "[fd7a:115c:a1e0::5a39:3504]:9117:9117" # IPv6 Access
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:9117:9117" 
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - AUTO_UPDATE=true #optional
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/jackett/config:/config
+      # This is for .torrent files, good practice
+      - /mnt/crucial500/downloads/jackett:/downloads
+    #healthcheck:
+    #  test: curl -f --silent --output /dev/null http://localhost:9117/ || exit 1
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 3
+    #  start_period: 30s
+    restart: unless-stopped
+    depends_on:
+      flaresolverr:
+        condition: service_healthy
+
+##################################################
+# FLARESOLVERR (Challenge Solver)
+##################################################
+  flaresolverr:
+    image: flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    hostname: flaresolverr
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.21
+        ipv6_address: fd00:dead:beef:2::21
+    ports:
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:8191:8191"
+      - "[fd7a:115c:a1e0::5a39:3504]:8191:8191" # IPv6 Access
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:8191:8191"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - LOG_LEVEL=info
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/flaresolverr/config:/config
+    healthcheck:
+      test: curl -f --silent --output /dev/null http://localhost:8191/ || exit 1
+      interval: 5m        # Check every 5 minutes (Quiet logs)
+      timeout: 10s
+      retries: 3
+      start_period: 20s   # Grace period for slow startup
+      start_interval: 5s  # CRITICAL: Check rapidly (every 5s) during startup so Prowlarr doesn't wait 5 mins
+    restart: unless-stopped   

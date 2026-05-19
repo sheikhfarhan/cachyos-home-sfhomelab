@@ -1,0 +1,33 @@
+# ----------------------------------------
+# Network Definition - Have already set this up beforehand
+# ----------------------------------------
+networks:
+  dockerapps-net:
+    external: true
+
+services:
+##################################################
+# PROFILARR (Quality Settings & Custom Format Syncs)
+##################################################
+  profilarr:
+    image: ghcr.io/dictionarry-hub/profilarr:latest
+    container_name: profilarr
+    hostname: profilarr
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.19
+        ipv6_address: fd00:dead:beef:2::19
+    ports:
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:6868:6868"
+      - "[fd7a:115c:a1e0::5a39:3504]:6868:6868" # IPv6 Access
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:6868:6868"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=022
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/06-profilarr/config:/config
+    restart: unless-stopped

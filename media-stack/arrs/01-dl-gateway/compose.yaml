@@ -1,0 +1,134 @@
+# ----------------------------------------
+# Network Definition - Have already set this up beforehand
+# ----------------------------------------
+networks:
+  dockerapps-net:
+    external: true
+
+services:
+##################################################
+# 1. GLUETUN (VPN Tunnel)
+##################################################
+  gluetun:
+    image: qmcgaw/gluetun:v3
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    # This setting ensures IPv6 is enabled INSIDE the container
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.11 
+        ipv6_address: fd00:dead:beef:2::11
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.{ROOT_DOMAIN}:100.110.20.2"
+    ports:
+      # --- GLUETUN CONTROL SERVER ---
+      - "100.110.20.1:8001:8000" # Tailscale Access
+      - "[fd7a:115c:a1e0::5a39:3504]:8001:8000" # IPv6 Access
+      - "127.0.0.1:8001:8000"    # Localhost/SSH Access
+
+      # --- QBITTORRENT WEB UI ---
+      - "100.110.20.1:8080:8080" # Tailscale Access
+      - "[fd7a:115c:a1e0::5a39:3504]:8080:8080" # IPv6 Access
+      - "127.0.0.1:8080:8080"    # Localhost/SSH Access
+
+      # --- TRANSMISSION WEB UI ---
+      - "100.110.20.1:9091:9091" # Tailscale Access
+      - "[fd7a:115c:a1e0::5a39:3504]:9091:9091" # IPv6 Access
+      - "127.0.0.1:9091:9091"    # Localhost/SSH Access
+    volumes:
+      # personal preference to split the config and auth folder locally. With only ./gluetun:/gluetun will also simply work
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/01-dl-gateway/gluetun/config:/gluetun
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/01-dl-gateway/gluetun/auth:/gluetun/auth:ro
+      - /lib/modules:/lib/modules:ro
+    environment:
+      # --- General Settings
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      # --- VPN Settings
+      - VPN_SERVICE_PROVIDER=airvpn # This one is hardcoded, as it won't change
+      - VPN_TYPE=${VPN_TYPE}
+      - VPN_IPV6=yes
+      # --- WireGuard Settings
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_PRESHARED_KEY=${WIREGUARD_PRESHARED_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES}
+      #- WIREGUARD_MTU=${WIREGUARD_MTU}
+      # --- Port Forwarding
+      - FIREWALL_VPN_INPUT_PORTS=${AIRVPN_PORT_QBIT},${AIRVPN_PORT_TRANS}
+      # --- Adding below to prevent warning in logs and reduce ram usage
+      - BLOCK_MALICIOUS=off
+      - BLOCK_SURVEILLANCE=off
+      - BLOCK_ADS=off
+      # --- Disables DNS over TLS
+      - DNS_UPSTREAM_RESOLVER_TYPE=plain
+      # --- This maps internally to 1.1.1.1 (Cloudflare) and 8.8.8.8 (Google)
+      - DNS_UPSTREAM_PLAIN_ADDRESSES=1.1.1.1:53,8.8.8.8:53
+      #- LOG_LEVEL=debug
+      # --- CONTROL SERVER SECURITY ---
+      - HTTP_CONTROL_SERVER_LOG=${HTTP_CONTROL_SERVER_LOG}
+      #- HTTP_CONTROL_SERVER_AUTH_DEFAULT_ROLE=${GLUETUN_AUTH_JSON} # commeting this out since pivot to using config.toml
+    restart: unless-stopped
+##################################################
+# 2. QBITTORRENT (Client 1)
+##################################################
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: service:gluetun
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080 # This is the internal port. It is accessible on 8080 from the Gluetun service network.
+      - WEBUI_HOST=* # Allows other containers to access the Web UI for integration
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/01-dl-gateway/qbittorrent/config:/config
+      - /mnt/crucial500/downloads:/downloads
+    #healthcheck:
+    #  test: curl -f --silent --output /dev/null http://localhost:8080 || exit 1
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 3
+    #  start_period: 20s
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_healthy
+##################################################
+# 3. TRANSMISSION (Client 2)
+##################################################
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    network_mode: service:gluetun
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - USER=${TRANSMISSION_USER} # transmission username
+      - PASS=${TRANSMISSION_PASS} # transmission password
+      - WEBUI_PORT=9091 # Internal Web UI port (must match Gluetun mapping)
+      - PEERPORT=${AIRVPN_PORT_TRANS}
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/01-dl-gateway/transmission/config:/config
+      - /mnt/crucial500/downloads:/downloads
+    #healthcheck:
+    #  # We just want to know if the port is open!
+    #  test: curl -s http://localhost:9091/ || exit 1
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 3
+    #  start_period: 20s
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_healthy

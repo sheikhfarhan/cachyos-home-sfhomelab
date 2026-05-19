@@ -16,7 +16,7 @@ services:
         ipv4_address: 172.20.0.26
         ipv6_address: fd00:dead:beef:2::26
     volumes:
-      - ./dozzle-data:/data
+      - /home/sfarhan/cachyos-home/mon-stack/dozzle/dozzle-data:/data
     ports:
       # Allows secure access via Tailscale mesh
       - "100.110.20.1:9090:8080"

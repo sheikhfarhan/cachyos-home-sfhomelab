@@ -1,0 +1,37 @@
+# ----------------------------------------
+# Network Definition - Have already set this up beforehand
+# ----------------------------------------
+networks:
+  dockerapps-net:
+    external: true
+
+services:
+##################################################
+# SONARR (TV Show Management)
+##################################################
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    hostname: sonarr
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.14 
+        ipv6_address: fd00:dead:beef:2::14
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/03-sonarr/config:/config
+      - /mnt/vault/media:/media
+      - /mnt/crucial500/downloads:/downloads
+    ports:
+      # Allows secure access via Tailscale mesh
+      - "100.110.20.1:8989:8989"
+      - "[fd7a:115c:a1e0::5a39:3504]:8989:8989" # IPv6 Access
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:8989:8989"
+    extra_hosts:
+      # Intercept Gotify traffic and route it directly over Tailscale!
+      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+    restart: unless-stopped
