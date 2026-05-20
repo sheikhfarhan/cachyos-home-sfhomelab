@@ -27,6 +27,9 @@ services:
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
       - "gotify.{ROOT_DOMAIN}:100.110.20.2"
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
     ports:
       # --- GLUETUN CONTROL SERVER ---
       - "100.110.20.1:8001:8000" # Tailscale Access
@@ -68,10 +71,6 @@ services:
       - BLOCK_MALICIOUS=off
       - BLOCK_SURVEILLANCE=off
       - BLOCK_ADS=off
-      # --- Disables DNS over TLS
-      - DNS_UPSTREAM_RESOLVER_TYPE=plain
-      # --- This maps internally to 1.1.1.1 (Cloudflare) and 8.8.8.8 (Google)
-      - DNS_UPSTREAM_PLAIN_ADDRESSES=1.1.1.1:53,8.8.8.8:53
       #- LOG_LEVEL=debug
       # --- CONTROL SERVER SECURITY ---
       - HTTP_CONTROL_SERVER_LOG=${HTTP_CONTROL_SERVER_LOG}
