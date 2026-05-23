@@ -30,16 +30,28 @@ echo "[3/7] Re-creating Caddy (Reverse Proxy)..."
 cd "$GATEWAY/cachyos-caddy" && docker compose up -d --force-recreate
 
 # --- Step 3: Monitoring & Management ---
-echo "[4/7] Re-creating Monitoring Stack (Homepage, Socket Proxy, Beszel)..."
-cd "$MON" && docker compose up -d --force-recreate
+echo "[4/7] Re-creating Monitoring Stack (socket-proxy)..."
+cd "$MON"/cachyos-socket-proxy && docker compose up -d --force-recreate
 echo "⏳ Sleeping 5s..."
-sleep 10
+sleep 5
+
+echo "Re-creating Monitoring Stack (Beszell)..."
+cd "$MON"/beszel && docker compose up -d --force-recreate
+
+echo "Re-creating Monitoring Stack (Dozzle)..."
+cd "$MON"/dozzle && docker compose up -d --force-recreate
+
+echo "Re-creating Monitoring Stack (Arcane)..."
+cd "$MON"/arcane && docker compose up -d --force-recreate
+
+echo "Re-creating Monitoring Stack (Homepage)..."
+cd "$MON"/homepage && docker compose up -d --force-recreate
 
 # --- Step 4: Media Core ---
 echo "[5/7] Re-creating Jellyfin Stack (Media & Requests)..."
 cd "$MEDIA/jellyfin" && docker compose up -d --force-recreate
-echo "⏳ Sleeping 10s..."
-sleep 10
+echo "⏳ Sleeping 5s..."
+sleep 5
 
 # --- Step 5: Automation Engine (The Micro-Stacks) ---
 echo "[6/7] Initiating Multi-Stage Download & ARR Deployment..."
@@ -61,8 +73,6 @@ sleep 10
 
 echo "  -> [Tier 4] Re-creating Metadata syncs (04-profilarr)..."
 cd "$MEDIA/arrs/04-profilarr" && docker compose up -d --force-recreate
-echo "  ⏳ Sleeping 5s..."
-sleep 5
 
 # --- Step 6: Analytics & Backups ---
 echo "[7/7] Re-creating Kopia (Backups)..."
