@@ -175,15 +175,15 @@
           snapshotHost: cachyos
           snapshotPath: /data/homelab-services
 
-    - Netbord Peer - CachyOS:
-        icon: /icons/netbirdh.png
+    - Netbird Peer - CachyOS:
+        icon: /icons/netbird.png
         href: https://netbird.sfhomelab.com/peers
         # added ping to machine's tailscale ID and removed container:
         ping: 10.80.0.1
         description: NetBird Subnet Mesh Network
 
-    - Netbord Peer - CachyOS:
-        icon: /icons/netbirdh.png
+    - Netbird Peer - CachyOS:
+        icon: /icons/netbird.png
         href: https://netbird.sfhomelab.com/peers
         # added ping to machine's tailscale ID and removed container:
         ping: 10.80.0.2
@@ -267,7 +267,7 @@
 
     - GoAccess:
         icon: goaccess.png
-        href: https://goaccess.{{HOMEPAGE_VAR_ROOT_DOMAIN}}  
+        href: http://10.80.0.2:7890/
         description: Web Log Analysis
         server: ovh-vps-remote
         container: goaccess
