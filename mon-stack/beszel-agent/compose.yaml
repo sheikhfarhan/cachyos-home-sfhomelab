@@ -33,7 +33,7 @@ services:
       # NEW: Enable Push Mode via WebSockets (Point to Beszel Hub via Tailscale Net)
       - HUB_URL=http://10.80.0.2:8090
     volumes:
-      - /home/sfarhan/homelab/cachyos-home/mon-stack/beszel/beszel_agent_data:/var/lib/beszel-agent
+      - /home/sfarhan/homelab/cachyos-home/mon-stack/beszel-agent/beszel_agent_data:/var/lib/beszel-agent
       - /:/extra-filesystems/nvme0n1__CachyOS:ro
       - /mnt/crucial500/.beszel:/extra-filesystems/sdc__Scratch_SSD:ro
       - /mnt/vault/.beszel:/extra-filesystems/HDD_Vault:ro
