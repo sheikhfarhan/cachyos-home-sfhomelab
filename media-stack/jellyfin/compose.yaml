@@ -20,6 +20,7 @@ services:
         ipv4_address: 172.20.0.10
         ipv6_address: fd00:dead:beef:2::10
     ports:
+      - "10.80.0.1:8096:8096"    # NEW: The NetBird Door
       # 1. Opens the door for the OVH-VPS proxy (Tailscale)
       - "100.110.20.1:8096:8096"
       - "[fd7a:115c:a1e0::5a39:3504]:8096:8096"
@@ -63,6 +64,7 @@ services:
         ipv4_address: 172.20.0.12
         ipv6_address: fd00:dead:beef:2::12
     ports:
+      - "10.80.0.1:5055:5055"    # NEW: The NetBird Door
       # Allows secure access via Tailscale mesh (from the VPS Caddy)
       - "100.110.20.1:5055:5055"
       # Allows secure access via Tailscale mesh (IPv6)
