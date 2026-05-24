@@ -20,10 +20,9 @@ services:
         ipv4_address: 172.20.0.10
         ipv6_address: fd00:dead:beef:2::10
     ports:
-      - "10.80.0.1:8096:8096"    # NEW: The NetBird Door
-      # 1. Opens the door for the OVH-VPS proxy (Tailscale)
-      - "100.110.20.1:8096:8096"
-      - "[fd7a:115c:a1e0::5a39:3504]:8096:8096"
+      # 1. Opens the door for the OVH-VPS proxy (Netbird)
+      - "10.80.0.1:8096:8096"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:8096:8096"
       # 2. Opens the door for our Home TV (Local LAN)
       - "192.168.0.100:8096:8096"
       
@@ -31,8 +30,8 @@ services:
       - "127.0.0.1:8096:8096"
 
     extra_hosts:
-      # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      # Intercept Gotify traffic and route it directly over Netbird!
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -64,16 +63,15 @@ services:
         ipv4_address: 172.20.0.12
         ipv6_address: fd00:dead:beef:2::12
     ports:
-      - "10.80.0.1:5055:5055"    # NEW: The NetBird Door
-      # Allows secure access via Tailscale mesh (from the VPS Caddy)
-      - "100.110.20.1:5055:5055"
-      # Allows secure access via Tailscale mesh (IPv6)
-      - "[fd7a:115c:a1e0::5a39:3504]:5055:5055"
+      # Allows secure access via Netbird mesh (from the VPS Caddy)
+      - "10.80.0.1:5055:5055"
+      # Allows secure access via Netbird mesh (IPv6)
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:5055:5055"
       # Allows local access via CachyOS terminal or SSH tunnel (Glass-Break)
       - "127.0.0.1:5055:5055"
     extra_hosts:
-      # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      # Intercept Gotify traffic and route it directly over Netbird !
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     environment:
       - PUID=${PUID}
       - PGID=${PGID}

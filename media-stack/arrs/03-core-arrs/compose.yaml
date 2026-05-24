@@ -27,13 +27,13 @@ services:
       - /mnt/crucial500/downloads:/downloads
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:7878:7878"
-      - "[fd7a:115c:a1e0::5a39:3504]:7878:7878" # IPv6 Access
+      - "10.80.0.1:7878:7878"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:7878:7878" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:7878:7878"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     restart: unless-stopped
 
 ##################################################
@@ -57,13 +57,13 @@ services:
       - /mnt/crucial500/downloads:/downloads
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:8989:8989"
-      - "[fd7a:115c:a1e0::5a39:3504]:8989:8989" # IPv6 Access
+      - "10.80.0.1:8989:8989"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:8989:8989" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:8989:8989"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     restart: unless-stopped
 
 ##################################################
@@ -86,8 +86,8 @@ services:
       - /mnt/vault/media:/media
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:6767:6767"
-      - "[fd7a:115c:a1e0::5a39:3504]:6767:6767" # IPv6 Access
+      - "10.80.0.1:6767:6767"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:6767:6767" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:6767:6767"
     restart: unless-stopped

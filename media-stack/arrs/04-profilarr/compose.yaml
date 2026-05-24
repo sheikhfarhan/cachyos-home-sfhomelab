@@ -19,8 +19,8 @@ services:
         ipv6_address: fd00:dead:beef:2::19
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:6868:6868"
-      - "[fd7a:115c:a1e0::5a39:3504]:6868:6868" # IPv6 Access
+      - "10.80.0.1:6868:6868"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:6868:6868" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:6868:6868"
     environment:

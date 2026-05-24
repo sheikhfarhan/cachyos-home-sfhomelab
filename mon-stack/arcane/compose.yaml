@@ -17,17 +17,17 @@ services:
         ipv6_address: fd00:dead:beef:2::17
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:3552:3552"
-      - "[fd7a:115c:a1e0::5a39:3504]:3552:3552" # IPv6 Access
+      - "10.80.0.1:3552:3552"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:3552:3552" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:3552:3552"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     volumes:
       - /home/sfarhan/homelab/cachyos-home/mon-stack/arcane/arcane-data:/app/data
     environment:
-      - APP_URL=http://100.110.20.1:3552
+      - APP_URL=http://10.80.0.1:3552
       - DOCKER_HOST=tcp://172.20.0.28:2375
       - PUID=${PUID}
       - PGID=${PGID}

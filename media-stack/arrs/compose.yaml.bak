@@ -25,20 +25,20 @@ services:
         ipv6_address: fd00:dead:beef:2::11
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.sfhomelab.com:100.110.20.2"
+      - "gotify.sfhomelab.com:10.80.0.2"
     ports:
       # --- GLUETUN CONTROL SERVER ---
-      - "100.110.20.1:8001:8000" # Tailscale Access
+      - "10.80.0.1:8001:8000" # Tailscale Access
       - "[fd7a:115c:a1e0::5a39:3504]:8001:8000" # IPv6 Access
       - "127.0.0.1:8001:8000"    # Localhost/SSH Access
 
       # --- QBITTORRENT WEB UI ---
-      - "100.110.20.1:8080:8080" # Tailscale Access
+      - "10.80.0.1:8080:8080" # Tailscale Access
       - "[fd7a:115c:a1e0::5a39:3504]:8080:8080" # IPv6 Access
       - "127.0.0.1:8080:8080"    # Localhost/SSH Access
 
       # --- TRANSMISSION WEB UI ---
-      - "100.110.20.1:9091:9091" # Tailscale Access
+      - "10.80.0.1:9091:9091" # Tailscale Access
       - "[fd7a:115c:a1e0::5a39:3504]:9091:9091" # IPv6 Access
       - "127.0.0.1:9091:9091"    # Localhost/SSH Access
     volumes:
@@ -147,7 +147,7 @@ services:
       - net.ipv6.conf.all.disable_ipv6=0
     ports:
     # Allows secure access via Tailscale mesh
-      - "100.110.20.1:9696:9696"
+      - "10.80.0.1:9696:9696"
       - "[fd7a:115c:a1e0::5a39:3504]:9696:9696" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:9696:9696"
@@ -181,7 +181,7 @@ services:
       - net.ipv6.conf.all.disable_ipv6=0
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:9117:9117"
+      - "10.80.0.1:9117:9117"
       - "[fd7a:115c:a1e0::5a39:3504]:9117:9117" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:9117:9117" 
@@ -229,13 +229,13 @@ services:
       - /mnt/crucial500/downloads:/downloads
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:7878:7878"
+      - "10.80.0.1:7878:7878"
       - "[fd7a:115c:a1e0::5a39:3504]:7878:7878" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:7878:7878"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     restart: unless-stopped
     depends_on:
       qbittorrent:
@@ -261,13 +261,13 @@ services:
       - /mnt/crucial500/downloads:/downloads
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:8989:8989"
+      - "10.80.0.1:8989:8989"
       - "[fd7a:115c:a1e0::5a39:3504]:8989:8989" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:8989:8989"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     restart: unless-stopped
     depends_on:
       qbittorrent:
@@ -292,7 +292,7 @@ services:
       - /mnt/vault/media:/media
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:6767:6767"
+      - "10.80.0.1:6767:6767"
       - "[fd7a:115c:a1e0::5a39:3504]:6767:6767" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:6767:6767"
@@ -315,7 +315,7 @@ services:
         ipv6_address: fd00:dead:beef:2::21
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:8191:8191"
+      - "10.80.0.1:8191:8191"
       - "[fd7a:115c:a1e0::5a39:3504]:8191:8191" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:8191:8191"
@@ -347,7 +347,7 @@ services:
         ipv6_address: fd00:dead:beef:2::19
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:6868:6868"
+      - "10.80.0.1:6868:6868"
       - "[fd7a:115c:a1e0::5a39:3504]:6868:6868" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:6868:6868"

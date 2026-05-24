@@ -179,7 +179,7 @@
         icon: tailscale
         href: https://login.tailscale.com/admin/machines
         # added ping to machine's tailscale ID and removed container:
-        ping: 100.110.20.1
+        ping: 10.80.0.1
         description: Tailscale Subnet Mesh Network
         widget:
           type: tailscale
@@ -190,7 +190,7 @@
     - Tailscale - OVH-VPS:
         icon: tailscale
         href: https://login.tailscale.com/admin/machines
-        ping: 100.110.20.2
+        ping: 10.80.0.2
         description: Tailscale Subnet Mesh Network
         widget:
           type: tailscale
@@ -218,7 +218,7 @@
         container: vps-caddy
         widget:
           type: caddy
-          url: http://100.110.20.2:2019/
+          url: http://10.80.0.2:2019/
           fields: ["upstreams", "requests", "requests_failed"]
         
     - Uptime Kuma:
@@ -236,7 +236,7 @@
         container: komodo-core
         widget:
           type: komodo
-          url: http://100.110.20.2:9120/
+          url: http://10.80.0.2:9120/
           key: {{HOMEPAGE_VAR_KOMODO_KEY}}
           secret: {{HOMEPAGE_VAR_KOMODO_SECRET}}
           showSummary: true # optional, default: false. Takes precedence over showStacks
@@ -251,13 +251,13 @@
 
     - Beszel Hub:
         icon: beszel.png
-        href: http://100.110.20.2:8090/
+        href: http://10.80.0.2:8090/
         description: System Monitoring
         server: ovh-vps-remote
         container: beszel-hub
         widget:
           type: beszel
-          url: http://100.110.20.2:8090/
+          url: http://10.80.0.2:8090/
           username: {{HOMEPAGE_VAR_BESZEL_USER}}
           password: {{HOMEPAGE_VAR_BESZEL_PASS}}
           systemId: {{HOMEPAGE_VAR_BESZEL_SYSTEMID}}

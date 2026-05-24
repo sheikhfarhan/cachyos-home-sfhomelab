@@ -26,24 +26,24 @@ services:
         ipv6_address: fd00:dead:beef:2::11
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.{ROOT_DOMAIN}:100.110.20.2"
+      - "gotify.{ROOT_DOMAIN}:10.80.0.2"
     dns:
       - 1.1.1.1
       - 8.8.8.8
     ports:
       # --- GLUETUN CONTROL SERVER ---
-      - "100.110.20.1:8001:8000" # Tailscale Access
-      - "[fd7a:115c:a1e0::5a39:3504]:8001:8000" # IPv6 Access
+      - "10.80.0.1:8001:8000" # Tailscale Access
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:8001:8000" # IPv6 Access
       - "127.0.0.1:8001:8000"    # Localhost/SSH Access
 
       # --- QBITTORRENT WEB UI ---
-      - "100.110.20.1:8080:8080" # Tailscale Access
-      - "[fd7a:115c:a1e0::5a39:3504]:8080:8080" # IPv6 Access
+      - "10.80.0.1:8080:8080" # Tailscale Access
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:8080:8080" # IPv6 Access
       - "127.0.0.1:8080:8080"    # Localhost/SSH Access
 
       # --- TRANSMISSION WEB UI ---
-      - "100.110.20.1:9091:9091" # Tailscale Access
-      - "[fd7a:115c:a1e0::5a39:3504]:9091:9091" # IPv6 Access
+      - "10.80.0.1:9091:9091" # Tailscale Access
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:9091:9091" # IPv6 Access
       - "127.0.0.1:9091:9091"    # Localhost/SSH Access
     volumes:
       # personal preference to split the config and auth folder locally. With only ./gluetun:/gluetun will also simply work

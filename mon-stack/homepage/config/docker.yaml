@@ -18,5 +18,5 @@ cachyos-local:
 # Remote Node (OVH-VPS)
 # Homepage reaches across the Tailscale mesh to the VPS proxy
 ovh-vps-remote:
-  host: 100.110.20.2
+  host: 10.80.0.2
   port: 2375

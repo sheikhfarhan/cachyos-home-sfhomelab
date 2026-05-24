@@ -19,13 +19,13 @@ services:
       - /home/sfarhan/cachyos-home/mon-stack/dozzle/dozzle-data:/data
     ports:
       # Allows secure access via Tailscale mesh
-      - "100.110.20.1:9090:8080"
-      - "[fd7a:115c:a1e0::5a39:3504]:9090:8080" # IPv6 Access
+      - "10.80.0.1:9090:8080"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:9090:8080" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:9090:8080"
     extra_hosts:
       # Intercept Gotify traffic and route it directly over Tailscale!
-      - "gotify.${ROOT_DOMAIN}:100.110.20.2"
+      - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     environment:
       # Use the Proxy
       - DOCKER_HOST=tcp://172.20.0.28:2375

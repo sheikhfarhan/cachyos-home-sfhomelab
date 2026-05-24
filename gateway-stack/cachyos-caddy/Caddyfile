@@ -67,7 +67,7 @@
 (security) {
     @geoblock {
         # 1. Ignore the Geo-block if the IP comes from Tailscale, Docker, or LAN
-        not remote_ip 100.110.20.0/24 172.20.0.0/24 192.168.0.0/16 127.0.0.1 ::1
+        not remote_ip 10.80.0.0/16 172.20.0.0/24 192.168.0.0/16 127.0.0.1 ::1
         
         # 2. Block everyone else unless they are in SG
         not maxmind_geolocation {
