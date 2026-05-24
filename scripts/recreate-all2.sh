@@ -36,7 +36,7 @@ echo "⏳ Sleeping 5s..."
 sleep 5
 
 echo "Re-creating Monitoring Stack (Beszell)..."
-cd "$MON"/beszel && docker compose up -d --force-recreate
+cd "$MON"/beszel-agent && docker compose up -d --force-recreate
 
 echo "Re-creating Monitoring Stack (Dozzle)..."
 cd "$MON"/dozzle && docker compose up -d --force-recreate
