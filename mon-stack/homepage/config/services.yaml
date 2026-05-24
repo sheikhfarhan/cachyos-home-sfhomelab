@@ -175,28 +175,19 @@
           snapshotHost: cachyos
           snapshotPath: /data/homelab-services
 
-    - Tailscale - CachyOS:
-        icon: tailscale
-        href: https://login.tailscale.com/admin/machines
+    - Netbord Peer - CachyOS:
+        icon: /icons/netbirdh.png
+        href: https://netbird.sfhomelab.com/peers
         # added ping to machine's tailscale ID and removed container:
         ping: 10.80.0.1
-        description: Tailscale Subnet Mesh Network
-        widget:
-          type: tailscale
-          deviceid: {{HOMEPAGE_VAR_TAILSCALE_CACHYOS_DEVICE_ID}}
-          key: {{HOMEPAGE_VAR_TAILSCALE_KEY}}
+        description: NetBird Subnet Mesh Network
 
-    # Added a new machine (a VPS) that is part of Tailscale network.
-    - Tailscale - OVH-VPS:
-        icon: tailscale
-        href: https://login.tailscale.com/admin/machines
+    - Netbord Peer - CachyOS:
+        icon: /icons/netbirdh.png
+        href: https://netbird.sfhomelab.com/peers
+        # added ping to machine's tailscale ID and removed container:
         ping: 10.80.0.2
-        description: Tailscale Subnet Mesh Network
-        widget:
-          type: tailscale
-          deviceid: {{HOMEPAGE_VAR_TAILSCALE_OVHVPS_DEVICE_ID}}
-          key: {{HOMEPAGE_VAR_TAILSCALE_KEY}}
-
+        description: NetBird Subnet Mesh Network
       
     #- Authentik:
     #    icon: authentik.png
