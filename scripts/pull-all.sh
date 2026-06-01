@@ -17,7 +17,10 @@ STACKS=(
 
   # --- Media Stack ---
   "media-stack/jellyfin"
-  "media-stack/vpn-arr-stack"
+  "media-stack/arrs/01-dl-gateway"
+  "media-stack/arrs/02-indexers"
+  "media-stack/arrs/03-core-arrs"
+  "media-stack/arrs/04-profilarr"
 
   # --- Monitoring Stack ---
   "mon-stack"
