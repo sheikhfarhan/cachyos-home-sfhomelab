@@ -20,7 +20,10 @@ cd "$OPS/kopia" && docker compose down
 
 # --- Step 2: Automation Engine ---
 echo "[2/5] Stopping VPN-ARR-Stack (Downloads & Managers)..."
-cd "$MEDIA/vpn-arr-stack" && docker compose down
+cd "$MEDIA/arrs/01-dl-gateway" && docker compose down
+cd "$MEDIA/arrs/02-indexers" && docker compose down
+cd "$MEDIA/arrs/03-core-arrs" && docker compose down
+cd "$MEDIA/arrs/04-profilarr" && docker compose down
 
 # --- Step 3: Media Core ---
 echo "[3/5] Stopping Jellyfin Stack (Media)..."
@@ -29,7 +32,7 @@ cd "$MEDIA/jellyfin" && docker compose down
 # --- Step 4: Monitoring & Management ---
 echo "[4/5] Stopping Monitoring Stack (Homepage, Socket Proxy, Beszel)..."
 cd "$MON/arcane" && docker compose down
-cd "$MON/beszel" && docker compose down
+cd "$MON/beszel-agent" && docker compose down
 cd "$MON/cachyos-socket-proxy" && docker compose down
 cd "$MON/dozzle" && docker compose down
 cd "$MON/homepage" && docker compose down

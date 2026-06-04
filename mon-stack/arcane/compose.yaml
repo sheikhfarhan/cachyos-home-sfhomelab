@@ -16,13 +16,13 @@ services:
         ipv4_address: 172.20.0.17
         ipv6_address: fd00:dead:beef:2::17
     ports:
-      # Allows secure access via Tailscale mesh
+      # Allows secure access via NetBird mesh
       - "10.80.0.1:3552:3552"
       - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:3552:3552" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:3552:3552"
     extra_hosts:
-      # Intercept Gotify traffic and route it directly over Tailscale!
+      # Intercept Gotify traffic and route it directly over NetBird!
       - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     volumes:
       - /home/sfarhan/homelab/cachyos-home/mon-stack/arcane/arcane-data:/app/data

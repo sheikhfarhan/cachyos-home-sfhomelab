@@ -17,10 +17,10 @@ services:
         ipv6_address: fd00:dead:beef:2::32
     # No longer need for ports for Push Mode!
     #ports:
-      # Expose this port so the VPS Hub can scrape it via Tailscale!
+      # Expose this port so the VPS Hub can scrape it via NetBird!
       #- "45876:45876"
     extra_hosts:
-      # Intercept Gotify traffic and route it directly over Tailscale!
+      # Intercept Gotify traffic and route it directly over NetBird!
       - "gotify.${ROOT_DOMAIN}:10.80.0.2"
     environment:
       - TZ=${TZ}   
@@ -30,7 +30,7 @@ services:
       - TOKEN=${BESZEL_CACHYOS_TOKEN}
       - DOCKER_HOST=tcp://172.20.0.28:2375
       - FILESYSTEM=/dev/nvme0n1p2
-      # NEW: Enable Push Mode via WebSockets (Point to Beszel Hub via Tailscale Net)
+      # NEW: Enable Push Mode via WebSockets (Point to Beszel Hub via NetBird Net)
       - HUB_URL=http://10.80.0.2:8090
     volumes:
       - /home/sfarhan/homelab/cachyos-home/mon-stack/beszel-agent/beszel_agent_data:/var/lib/beszel-agent
