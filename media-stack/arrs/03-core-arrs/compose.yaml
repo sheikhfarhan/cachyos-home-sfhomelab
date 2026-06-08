@@ -112,6 +112,8 @@ services:
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:9000:9000"
     environment:
+      - PUID=1000
+      - PGID=1000
       # --- Hardware & Performance (Crucial for CPU) ---
       - TRANSCRIBE_DEVICE=cpu
       - WHISPER_MODEL=base # Stick to 'base' or 'small'. 'medium' will choke a CPU.
