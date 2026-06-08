@@ -96,3 +96,51 @@ services:
         condition: service_started
       sonarr:
         condition: service_started
+
+  subgen:
+    image: mccloud/subgen:latest
+    container_name: subgenai
+    tty: true
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.34
+        ipv6_address: fd00:dead:beef:2::34
+    ports:
+      # Allows secure access via NetBird mesh
+      - "10.80.0.1:9000:9000"
+      - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:9000:9000" # IPv6 Access
+      # Allows local access via CachyOS terminal or SSH tunnel
+      - "127.0.0.1:9000:9000"
+    environment:
+      # --- Hardware & Performance (Crucial for CPU) ---
+      - TRANSCRIBE_DEVICE=cpu
+      - WHISPER_MODEL=base # Stick to 'base' or 'small'. 'medium' will choke a CPU.
+      - WHISPER_THREADS=4 # Tells Whisper how many CPU cores to use. Adjust based on your CachyOS host.
+      - CONCURRENT_TRANSCRIPTIONS=1 # NEVER set higher than 1 on CPU, or it will crash.
+      - CLEAR_VRAM_ON_COMPLETE=True # Good practice even on CPU to clear RAM.
+      
+      # --- Translation Magic (The Wife Protocol) ---
+      - TRANSCRIBE_OR_TRANSLATE=translate # This forces Whisper to output English from Korean audio.
+      - NAMESUBLANG=en # Tags the resulting SRT file as English so Jellyfin recognize it.
+      
+      # --- System & Networking ---
+      - WEBHOOKPORT=9000
+      - DEBUG=True # Keep this on until you confirm the first Korean show translates successfully.
+      - MODEL_PATH=/models
+      
+      # --- Path Mapping (If your folder structures differ) ---
+      # Only change these to True if Bazarr's view of /tv is different than Subgen's view.
+      - USE_PATH_MAPPING=False 
+      #- PATH_MAPPING_FROM=/tv
+      #- PATH_MAPPING_TO=/Volumes/TV
+
+    volumes:
+      # 1. The Model Cache (So it doesn't download 1GB every restart)
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/03-core-arrs/subgen/models:/models
+      # 2. The Media Volume
+      - /mnt/vault/media:/mnt/vault/media
+      
+    restart: unless-stopped
+    depends_on:
+      bazarr:
+        condition: service_started

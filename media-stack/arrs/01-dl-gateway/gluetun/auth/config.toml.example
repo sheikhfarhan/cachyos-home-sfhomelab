@@ -1,0 +1,13 @@
+[[roles]]
+name = "homepage"
+auth = "apikey"
+apikey = "generate_your_own_key"
+routes = [
+    "GET /v1/publicip/ip", 
+    "GET /v1/portforward"
+]
+
+[[roles]]
+name = "UptimeKuma"
+routes = ["GET /v1/vpn/status"]
+auth = "none" # Or "apikey" if you prefer strict internal security

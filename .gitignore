@@ -79,10 +79,10 @@ mon-stack/homepage/config/*
 #!gateway-stack/crowdsec/config/acquis.d/
 
 # --- Gluetun Auth (Inside media-stack) ---
-!media-stack/vpn-arr-stack/gluetun/auth/
-media-stack/vpn-arr-stack/gluetun/auth/*
+!media-stack/arrs/01-dl-gateway/gluetun/auth/
+media-stack/arrs/01-dl-gateway/gluetun/auth/*
 # Pick exceptions: Allow specific files
-!media-stack/vpn-arr-stack/gluetun/auth/config.toml.example
+!media-stack/arrs/01-dl-gateway/gluetun/auth/config.toml.example
 
 # --- Environment Variables ---
 # We explicitly WANT to track our example env file for documentation
