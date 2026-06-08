@@ -117,17 +117,18 @@ services:
       # --- Hardware & Performance (Crucial for CPU) ---
       - TRANSCRIBE_DEVICE=cpu
       - WHISPER_MODEL=base # Stick to 'base' or 'small'. 'medium' will choke a CPU.
-      - WHISPER_THREADS=4 # Tells Whisper how many CPU cores to use. Adjust based on your CachyOS host.
+      - WHISPER_THREADS=4 # Tells Whisper how many CPU cores to use. Adjust based on our CachyOS host.
       - CONCURRENT_TRANSCRIPTIONS=1 # NEVER set higher than 1 on CPU, or it will crash.
       - CLEAR_VRAM_ON_COMPLETE=True # Good practice even on CPU to clear RAM.
       
-      # --- Translation Magic (The Wife Protocol) ---
+      # --- Translation & Language Settings ---
       - TRANSCRIBE_OR_TRANSLATE=translate # This forces Whisper to output English from Korean audio.
       - NAMESUBLANG=en # Tags the resulting SRT file as English so Jellyfin recognize it.
+      - SKIP_IF_EXTERNAL_SUBTITLES_EXIST=True  # Aborts if Bazarr already downloaded a web sub
       
       # --- System & Networking ---
       - WEBHOOKPORT=9000
-      - DEBUG=True # Keep this on until you confirm the first Korean show translates successfully.
+      - DEBUG=True # Keep this on until we confirm the first Korean show translates successfully.
       - MODEL_PATH=/models
       
       # --- Path Mapping (If your folder structures differ) ---
