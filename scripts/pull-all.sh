@@ -23,7 +23,11 @@ STACKS=(
   "media-stack/arrs/04-profilarr"
 
   # --- Monitoring Stack ---
-  "mon-stack"
+  "mon-stack/arcane"
+  "mon-stack/beszel-agent"
+  "mon-stack/cachyos-socket-proxy"
+  "mon-stack/dozzle"
+  "mon-stack/homepage"
 
 )
 

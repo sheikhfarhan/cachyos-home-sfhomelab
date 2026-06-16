@@ -30,6 +30,7 @@
 # Ignore Sonarr/Radarr covers (They are just for Admin UI)
 **/MediaCover/
 **/mediacover/
+**/models/
 
 # Jellyfin Specifics
 **/jellyfin-config/config/cache/

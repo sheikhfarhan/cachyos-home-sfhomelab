@@ -28,6 +28,7 @@ docker-data/
 arcane-data/
 socket/
 dozzle-data/
+models/
 
 # --- Specific Pattern Directories ---
 *-config/
