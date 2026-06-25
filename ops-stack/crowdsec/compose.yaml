@@ -11,12 +11,14 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.24
         ipv6_address: fd00:dead:beef:2::24
-    ports:
-      - "127.0.0.1:8088:8080" # Allows host bouncer to reach the API
+    # Uncomment these since using a central LAPI setup to OVH-VPS
+    #ports:
+    #  - "127.0.0.1:8088:8080" # Allows host bouncer to reach the API
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - DISABLE_LOCAL_API=true
       # ADDED: additional collections and scenarios
       - COLLECTIONS=crowdsecurity/caddy crowdsecurity/http-cve crowdsecurity/base-http-scenarios crowdsecurity/whitelist-good-actors crowdsecurity/linux LePresidente/jellyfin 
       - SCENARIOS=crowdsecurity/http-probing LePresidente/jellyfin-bf crowdsecurity/http-generic-bf
