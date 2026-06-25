@@ -9,7 +9,7 @@
 
     # Caddy x Crowdsec
     crowdsec {
-        api_url http://crowdsec:8080
+        api_url http://10.80.0.2:9090/
         api_key {env.CROWDSEC_API_KEY}
         ticker_interval 30s
     }
