@@ -1,8 +1,9 @@
 # Crowdsec Configuration for Caddy and Jellyfin Logs
-filenames:
-  - /var/log/caddy/access.log
-labels:
-  type: caddy
+# Remove caddy stuffs
+#filenames:
+#  - /var/log/caddy/access.log
+#labels:
+#  type: caddy
 ---
 # Configuration to monitor Jellyfin logs for brute force attempts and other suspicious activity
 filenames:

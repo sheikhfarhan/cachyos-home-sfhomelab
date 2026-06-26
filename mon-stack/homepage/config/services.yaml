@@ -147,10 +147,10 @@
         container: crowdsec
         widget:
           type: crowdsec
-          url: http://172.20.0.24:8080
+          url: http://10.80.0.2:9090
           username: {{HOMEPAGE_VAR_CROWDSEC_USER}}
           password: {{HOMEPAGE_VAR_CROWDSEC_PASS}}
-          fields: ["alerts", "bans"]
+          limit24h: true
         
     - Dozzle:
         icon: dozzle.png
