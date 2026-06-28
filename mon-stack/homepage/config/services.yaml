@@ -21,8 +21,7 @@
           type: jellyseerr
           url: http://172.20.0.12:5055
           key: {{HOMEPAGE_VAR_SEERR_KEY}}
-
-- Automation:
+    
     - Radarr:
         icon: radarr.png
         href: http://172.20.0.13:7878
@@ -45,7 +44,6 @@
           url: http://172.20.0.14:8989
           key: {{HOMEPAGE_VAR_SONARR_KEY}}
           
-
     - Bazarr:
         icon: bazarr.png
         href: http://172.20.0.15:6767
@@ -78,29 +76,6 @@
         #  type: profilarr
         #  url: http://172.20.0.19:6868
 
-    - Gluetun:
-        icon: gluetun.png
-        href: "#"
-        description: VPN Gateway
-        server: cachyos-local
-        container: gluetun
-        widget:
-          type: gluetun
-          url: http://172.20.0.11:8000
-          key: {{HOMEPAGE_VAR_GLUETUN_KEY}}
-
-    #- Speedtest:
-    #    icon: /icons/speedtest-tracker.png
-    #    href: http://192.168.0.100:8085
-    #    description: Gluetun VPN Speedtest Tracker
-    #    container: speedtest-tracker
-    #    widget:
-    #      type: speedtest
-    #      url: http://192.168.0.100:8085
-    #      version: 1
-    #      key: {{HOMEPAGE_VAR_SPEEDTEST_KEY}} # required for version 2
-    #      bitratePrecision: 3 # optional, default is 0
-        
     - Transmission:
         icon: transmission.png
         href: http://172.20.0.11:9091
@@ -125,7 +100,38 @@
           username: {{HOMEPAGE_VAR_QBIT_USER}}
           password: {{HOMEPAGE_VAR_QBIT_PASS}}
 
+    #- Speedtest:
+    #    icon: /icons/speedtest-tracker.png
+    #    href: http://192.168.0.100:8085
+    #    description: Gluetun VPN Speedtest Tracker
+    #    container: speedtest-tracker
+    #    widget:
+    #      type: speedtest
+    #      url: http://192.168.0.100:8085
+    #      version: 1
+    #      key: {{HOMEPAGE_VAR_SPEEDTEST_KEY}} # required for version 2
+    #      bitratePrecision: 3 # optional, default is 0
+        
 - Management (CachyOS Home Node):
+
+    - Gluetun:
+        icon: gluetun.png
+        href: "#"
+        description: VPN Gateway
+        server: cachyos-local
+        container: gluetun
+        widget:
+          type: gluetun
+          url: http://172.20.0.11:8000
+          key: {{HOMEPAGE_VAR_GLUETUN_KEY}}
+
+    - Netbird Peer - CachyOS:
+        icon: /icons/netbird.png
+        href: https://netbird.sfhomelab.com/peers
+        # added ping to machine's tailscale ID and removed container:
+        ping: 10.80.0.1
+        description: NetBird Subnet Mesh Network
+
     - Arcane:
         icon: arcane.png
         href: http://localhost:3552
@@ -175,20 +181,6 @@
           snapshotHost: cachyos
           snapshotPath: /data/homelab-services
 
-    - Netbird Peer - CachyOS:
-        icon: /icons/netbird.png
-        href: https://netbird.sfhomelab.com/peers
-        # added ping to machine's tailscale ID and removed container:
-        ping: 10.80.0.1
-        description: NetBird Subnet Mesh Network
-
-    - Netbird Peer - CachyOS:
-        icon: /icons/netbird.png
-        href: https://netbird.sfhomelab.com/peers
-        # added ping to machine's tailscale ID and removed container:
-        ping: 10.80.0.2
-        description: NetBird Subnet Mesh Network
-      
     #- Authentik:
     #    icon: authentik.png
     #    href: https://auth.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
@@ -201,6 +193,7 @@
     #      version: 2
 
 - OVH-VPS Remote Services:
+
     - Caddy Reverse Proxy:
         icon: caddy.png
         href: https://status.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
@@ -211,7 +204,14 @@
           type: caddy
           url: http://10.80.0.2:2019/
           fields: ["upstreams", "requests", "requests_failed"]
-        
+
+    - Netbird Peer - OVH-VPS:
+        icon: /icons/netbird.png
+        href: https://netbird.sfhomelab.com/peers
+        # added ping to machine's tailscale ID and removed container:
+        ping: 10.80.0.2
+        description: NetBird Subnet Mesh Network
+
     - Uptime Kuma:
         icon: uptime-kuma.png
         href: https://kuma.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
@@ -271,3 +271,10 @@
         description: Web Log Analysis
         server: ovh-vps-remote
         container: goaccess
+
+    - OpenCloud:
+        icon: /icons/opencloud.png
+        href: https://cloud.{{HOMEPAGE_VAR_ROOT_DOMAIN}}
+        description: File Sync & Share
+        server: ovh-vps-remote
+        container: opencloud
