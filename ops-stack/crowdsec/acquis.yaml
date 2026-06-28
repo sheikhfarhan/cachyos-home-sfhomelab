@@ -1,4 +1,4 @@
-# Crowdsec Configuration for Caddy and Jellyfin Logs
+# Configuration for Caddy logs
 # Remove caddy stuffs
 #filenames:
 #  - /var/log/caddy/access.log
