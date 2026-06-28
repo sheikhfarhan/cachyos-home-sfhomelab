@@ -145,20 +145,6 @@
           key: {{HOMEPAGE_VAR_ARCANE_API_KEY}}
           fields: ["running", "stopped", "total", "image_updates"]
     
-    - CrowdSec:
-        icon: crowdsec.png
-        #href: http://172.20.0.24:8080
-        description: Security Brain
-        server: cachyos-local
-        container: crowdsec
-        widget:
-          type: crowdsec
-          url: http://10.80.0.2:9090
-          username: {{HOMEPAGE_VAR_CROWDSEC_USER}}
-          password: {{HOMEPAGE_VAR_CROWDSEC_PASS}}
-          limit24h: true
-          fields: ["bans"]
-        
     - Dozzle:
         icon: dozzle.png
         href: http://172.20.0.26:8080
@@ -212,6 +198,18 @@
         # added ping to machine's tailscale ID and removed container:
         ping: 10.80.0.2
         description: NetBird Subnet Mesh Network
+    
+    - CrowdSec:
+        icon: crowdsec.png
+        description: Security Brain
+        server: ovh-vps-remote
+        widget:
+          type: crowdsec
+          url: http://10.80.0.2:9090
+          username: {{HOMEPAGE_VAR_CROWDSEC_USER}}
+          password: {{HOMEPAGE_VAR_CROWDSEC_PASS}}
+          limit24h: true
+          fields: ["bans"]
 
     - Uptime Kuma:
         icon: uptime-kuma.png
