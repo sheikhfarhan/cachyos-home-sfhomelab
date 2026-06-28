@@ -128,7 +128,7 @@
     - Netbird Peer - CachyOS:
         icon: /icons/netbird.png
         href: https://netbird.sfhomelab.com/peers
-        # added ping to machine's tailscale ID and removed container:
+        # added ping and removed container:
         ping: 10.80.0.1
         description: NetBird Subnet Mesh Network
 
@@ -195,7 +195,7 @@
     - Netbird Peer - OVH-VPS:
         icon: /icons/netbird.png
         href: https://netbird.sfhomelab.com/peers
-        # added ping to machine's tailscale ID and removed container:
+        # added ping and removed container:
         ping: 10.80.0.2
         description: NetBird Subnet Mesh Network
     
@@ -203,13 +203,13 @@
         icon: crowdsec.png
         description: Security Brain
         server: ovh-vps-remote
+        ping: 10.80.0.2
         widget:
           type: crowdsec
-          url: http://10.80.0.2:9090
+          url: http://10.80.0.2:9090/
           username: {{HOMEPAGE_VAR_CROWDSEC_USER}}
           password: {{HOMEPAGE_VAR_CROWDSEC_PASS}}
           limit24h: true
-          fields: ["bans"]
 
     - Uptime Kuma:
         icon: uptime-kuma.png
