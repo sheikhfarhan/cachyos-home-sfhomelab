@@ -17,7 +17,7 @@ services:
       dockerapps-net:
         ipv4_address: 172.20.0.20
         ipv6_address: fd00:dead:beef:2::20
-    # This setting ensures IPv6 is enabled INSIDE the container
+    # ensures IPv6 is enabled INSIDE the container
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     ports:
@@ -71,14 +71,8 @@ services:
       - FLARESOLVERR_URL=http://trawl:8191
     volumes:
       - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/jackett/config:/config
-      # This is for .torrent files, good practice
+      # This is for .torrent files, optional
       - /mnt/crucial500/downloads/jackett:/downloads
-    #healthcheck:
-    #  test: curl -f --silent --output /dev/null http://localhost:9117/ || exit 1
-    #  interval: 30s
-    #  timeout: 10s
-    #  retries: 3
-    #  start_period: 30s
     restart: unless-stopped
     depends_on:
       - trawl
