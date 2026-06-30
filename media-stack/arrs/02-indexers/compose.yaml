@@ -36,9 +36,7 @@ services:
     volumes:
       - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/prowlarr/config:/config
     depends_on:
-      trawl:
-        condition: service_healthy
-        restart: true
+      - trawl
     restart: unless-stopped
 
 ##################################################
@@ -81,9 +79,8 @@ services:
     #  start_period: 30s
     restart: unless-stopped
     depends_on:
-      trawl:
-        condition: service_healthy
-        restart: true
+      - trawl
+
 
 ##################################################
 # FLARESOLVERR (Challenge Solver)
@@ -124,8 +121,7 @@ services:
 ##################################################  
   redis:
     image: redis:7-alpine
-    container_name: redis-alpine
-    hostname: redis-alpine
+    container_name: redis
     networks:
       dockerapps-net:
         ipv4_address: 172.20.0.35
@@ -151,13 +147,11 @@ services:
     shm_size: 2gb
     mem_limit: 4g
     environment:
-      REDIS_URL: redis://${REDIS_URL}
+      REDIS_URL: redis://redis:6379
       BROWSER_POOL_SIZE: 5
     healthcheck:
       test: wget -qO- http://localhost:8191/health
       interval: 30s
     restart: unless-stopped
     depends_on:
-      redis-alpine:
-        condition: service_healthy
-        restart: true
+      - redis

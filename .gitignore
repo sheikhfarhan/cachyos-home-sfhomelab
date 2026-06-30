@@ -47,6 +47,7 @@ MediaCover/
 *.log
 *.tar.gz
 *.zip
+*rdb
 
 # --- System & Misc ---
 .DS_Store

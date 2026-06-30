@@ -17,6 +17,7 @@
 **/tmp/
 **/*.log
 **/*.tmp
+**/*.rdb
 
 # Specific log files not in folders
 **/log.txt
