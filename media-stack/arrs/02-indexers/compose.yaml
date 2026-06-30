@@ -33,6 +33,7 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - FLARESOLVERR_URL=http://trawl:8191
     volumes:
       - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/prowlarr/config:/config
     depends_on:
@@ -67,6 +68,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
       - AUTO_UPDATE=true #optional
+      - FLARESOLVERR_URL=http://trawl:8191
     volumes:
       - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/jackett/config:/config
       # This is for .torrent files, good practice
