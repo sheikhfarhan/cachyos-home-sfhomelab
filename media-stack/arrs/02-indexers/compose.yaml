@@ -21,7 +21,7 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     ports:
-    # Allows secure access via Tailscale mesh
+    # Allows secure access via NetBird mesh
       - "10.80.0.1:9696:9696"
       - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:9696:9696" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
@@ -36,7 +36,7 @@ services:
     volumes:
       - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/prowlarr/config:/config
     depends_on:
-      flaresolverr:
+      trawl:
         condition: service_healthy
         restart: true
     restart: unless-stopped
@@ -56,7 +56,7 @@ services:
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=0
     ports:
-      # Allows secure access via Tailscale mesh
+      # Allows secure access via NetBird mesh
       - "10.80.0.1:9117:9117"
       - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:9117:9117" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
@@ -81,39 +81,83 @@ services:
     #  start_period: 30s
     restart: unless-stopped
     depends_on:
-      flaresolverr:
+      trawl:
         condition: service_healthy
         restart: true
 
 ##################################################
 # FLARESOLVERR (Challenge Solver)
 ##################################################
-  flaresolverr:
-    image: flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
-    hostname: flaresolverr
+  # flaresolverr:
+  #   image: flaresolverr/flaresolverr:latest
+  #   container_name: flaresolverr
+  #   hostname: flaresolverr
+  #   networks:
+  #     dockerapps-net:
+  #       ipv4_address: 172.20.0.21
+  #       ipv6_address: fd00:dead:beef:2::21
+  #   ports:
+  #     # Allows secure access via NetBird mesh
+  #     - "10.80.0.1:8191:8191"
+  #     - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:8191:8191" # IPv6 Access
+  #     # Allows local access via CachyOS terminal or SSH tunnel
+  #     - "127.0.0.1:8191:8191"
+  #   environment:
+  #     - PUID=${PUID}
+  #     - PGID=${PGID}
+  #     - TZ=${TZ}
+  #     - LOG_LEVEL=info
+  #   volumes:
+  #     - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/flaresolverr/config:/config
+  #   healthcheck:
+  #     test: curl -f --silent --output /dev/null http://localhost:8191/ || exit 1
+  #     interval: 5m        # Check every 5 minutes (Quiet logs)
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 20s   # Grace period for slow startup
+  #     start_interval: 5s  # CRITICAL: Check rapidly (every 5s) during startup so Prowlarr doesn't wait 5 mins
+  #   restart: unless-stopped
+
+##################################################
+# TRAWL (Alternative Drop-In Replacement for Flaresolverr)
+# https://github.com/germondai/trawl
+##################################################  
+  redis:
+    image: redis:7-alpine
+    container_name: redis-alpine
+    hostname: redis-alpine
     networks:
       dockerapps-net:
-        ipv4_address: 172.20.0.21
-        ipv6_address: fd00:dead:beef:2::21
+        ipv4_address: 172.20.0.35
+        ipv6_address: fd00:dead:beef:2::35
+    volumes:
+      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/trawl/redis_data:/data
+    restart: unless-stopped
+
+  trawl:
+    image: ghcr.io/germondai/trawl:latest
+    container_name: trawl
+    hostname: trawl
+    networks:
+      dockerapps-net:
+        ipv4_address: 172.20.0.36
+        ipv6_address: fd00:dead:beef:2::36
     ports:
-      # Allows secure access via Tailscale mesh
+      # Allows secure access via NetBird mesh
       - "10.80.0.1:8191:8191"
       - "[fd30:8fa7:ade1:f2e5:13a7:23c:717c:a555]:8191:8191" # IPv6 Access
       # Allows local access via CachyOS terminal or SSH tunnel
       - "127.0.0.1:8191:8191"
+    shm_size: 2gb
+    mem_limit: 4g
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-      - LOG_LEVEL=info
-    volumes:
-      - /home/sfarhan/homelab/cachyos-home/media-stack/arrs/02-indexers/flaresolverr/config:/config
+      REDIS_URL: redis://${REDIS_URL}
+      BROWSER_POOL_SIZE: 5
     healthcheck:
-      test: curl -f --silent --output /dev/null http://localhost:8191/ || exit 1
-      interval: 5m        # Check every 5 minutes (Quiet logs)
-      timeout: 10s
-      retries: 3
-      start_period: 20s   # Grace period for slow startup
-      start_interval: 5s  # CRITICAL: Check rapidly (every 5s) during startup so Prowlarr doesn't wait 5 mins
-    restart: unless-stopped   
+      test: wget -qO- http://localhost:8191/health
+      interval: 30s
+    restart: unless-stopped
+    depends_on:
+      redis-alpine:
+        condition: service_healthy
+        restart: true

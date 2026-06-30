@@ -21,13 +21,13 @@ echo "⏳ Sleeping 10s to allow CrowdSec LAPI to boot..."
 sleep 10
 
 # --- Step 2: Caddy & Maxmind  ---
-echo "[2/7] Re-creating Maxmind (IP Geolocation)..."
-cd "$GATEWAY/cachyos-maxmind" && docker compose up -d --force-recreate
-echo "⏳ Sleeping 5s..."
-sleep 5
+#echo "[2/7] Re-creating Maxmind (IP Geolocation)..."
+#cd "$GATEWAY/cachyos-maxmind" && docker compose up -d --force-recreate
+#echo "⏳ Sleeping 5s..."
+#sleep 5
 
-echo "[3/7] Re-creating Caddy (Reverse Proxy)..."
-cd "$GATEWAY/cachyos-caddy" && docker compose up -d --force-recreate
+#echo "[3/7] Re-creating Caddy (Reverse Proxy)..."
+#cd "$GATEWAY/cachyos-caddy" && docker compose up -d --force-recreate
 
 # --- Step 3: Monitoring & Management ---
 echo "[4/7] Re-creating Monitoring Stack (socket-proxy)..."
@@ -59,7 +59,7 @@ echo "[6/7] Initiating Multi-Stage Download & ARR Deployment..."
 echo "  -> [Tier 1] Re-creating Network Gateway & Downloaders (01-dl-gateway)..."
 cd "$MEDIA/arrs/01-dl-gateway" && docker compose up -d --force-recreate
 echo "  ⏳ Sleeping 15s for VPN tunnel and network bridge to stabilize..."
-sleep 15
+sleep 10
 
 echo "  -> [Tier 2] Re-creating Indexers & Solvers (02-indexers)..."
 cd "$MEDIA/arrs/02-indexers" && docker compose up -d --force-recreate

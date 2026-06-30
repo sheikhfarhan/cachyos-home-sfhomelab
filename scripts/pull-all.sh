@@ -8,8 +8,8 @@ BASE_DIR="/home/sfarhan/homelab/cachyos-home"
 STACKS=(
 
     # --- Gateway Stack ---
-  "gateway-stack/cachyos-caddy"
-  "gateway-stack/cachyos-maxmind"
+  #"gateway-stack/cachyos-caddy"
+  #"gateway-stack/cachyos-maxmind"
 
   # --- Ops Stack ---
   "ops-stack/kopia"
