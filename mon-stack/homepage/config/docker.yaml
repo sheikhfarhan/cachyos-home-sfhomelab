@@ -10,13 +10,13 @@
 #   socket: /var/run/docker.sock
 
 # Local Node (CachyOS)
-# Homepage talks to the local proxy via the internal docker network
+# Homepage talks to the local docker-proxy via the internal docker network
 cachyos-local:
   host: 172.20.0.28
   port: 2375
 
 # Remote Node (OVH-VPS)
-# Homepage reaches across the Tailscale mesh to the VPS proxy
+# Homepage reaches across the NetBird mesh to the VPS proxy
 ovh-vps-remote:
   host: 10.80.0.2
   port: 2375
